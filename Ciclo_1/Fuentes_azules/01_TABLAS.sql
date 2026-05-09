@@ -5,13 +5,13 @@ CREATE TABLE Usuario (
     id VARCHAR2(10),
     correo VARCHAR2(50),
     rol VARCHAR2(30),
-    nombre VARCHAR2(50),
-    apellidos VARCHAR2(50),
+    nombre VARCHAR2(60),
+    apellidos VARCHAR2(60),
     telefono VARCHAR2(10)
 );
 
 CREATE TABLE Administrador (
-    id_usuario VARCHAR2(10),
+    idUsuario VARCHAR2(10),
     permisos VARCHAR2(30),
     sede VARCHAR2(60)
 );
@@ -24,67 +24,72 @@ CREATE TABLE Categoria (
 
 CREATE TABLE Autor (
     id VARCHAR2(10),
-    nombre VARCHAR2(50),
-    apellidos VARCHAR2(50),
+    nombre VARCHAR2(60),
+    apellidos VARCHAR2(60),
     genero VARCHAR2(30),
-    nacionalidad VARCHAR2(30)
+    nacionalidad VARCHAR2(50)
 );
 
 CREATE TABLE Libro (
     id VARCHAR2(10),
-    titulo VARCHAR2(40),
+    titulo VARCHAR2(60),
     fecha_publicacion DATE,
     idioma VARCHAR2(30),
-    descripcion VARCHAR2(100),
-    id_categoria VARCHAR2(10)
+    descripcion VARCHAR2(200),
+    idCategoria VARCHAR2(10)
+);
+
+CREATE TABLE Libro_Autor (
+    idLibro VARCHAR2(10),
+    idAutor VARCHAR2(10)
 );
 
 CREATE TABLE Ejemplar (
     id VARCHAR2(10),
-    estado_fisico VARCHAR2(30),
-    disponibilidad CHAR(1),
+    estadoFisico VARCHAR2(30),
+    disponibilidad BOOLEAN,
     localizacion VARCHAR2(40),
-    fecha_adquisicion DATE,
-    id_edicion VARCHAR2(10)
+    fechaAdquisicion DATE,
+    idEdicion VARCHAR2(10)
 );
 
 CREATE TABLE Edicion (
     id VARCHAR2(10),
     año DATE,
     paginas INT,
-    id_libro VARCHAR2(10),
-    id_editorial VARCHAR2(10)
+    idLibro VARCHAR2(10),
+    idEditorial VARCHAR2(10)
 );
 
 CREATE TABLE Editorial (
     id VARCHAR2(10),
-    correo VARCHAR2(50),
+    correo VARCHAR2(100),
     telefono VARCHAR2(10),
-    nombre VARCHAR2(30),
+    nombre VARCHAR2(50),
     pais VARCHAR2(60)
 );
 
 CREATE TABLE Producto_Compra (
     id VARCHAR2(10),
     cantidad INT,
-    precio_unidad DECIMAL(10, 2),
-    id_compra VARCHAR2(10),
-    id_libro VARCHAR2(10)
+    precioUnidad DECIMAL(10, 2),
+    idCompra VARCHAR2(10),
+    idLibro VARCHAR2(10)
 );
 
 CREATE TABLE Compra (
     id VARCHAR2(10),
     fecha DATE,
     total DECIMAL(10, 2),
-    estado VARCHAR2(10),
-    id_proveedor VARCHAR2(10)
+    estado VARCHAR2(20),
+    idProveedor VARCHAR2(10)
 );
 
 CREATE TABLE Proveedor (
     id VARCHAR2(10),
-    correo VARCHAR2(50),
-    nombre VARCHAR2(30),
-    apellidos VARCHAR2(50),
+    correo VARCHAR2(100),
+    nombre VARCHAR2(60),
+    apellidos VARCHAR2(60),
     empresa VARCHAR2(50),
     telefono VARCHAR2(10)
 );

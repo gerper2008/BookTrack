@@ -31,8 +31,8 @@ ALTER TABLE Libro ADD CONSTRAINT CHECK_Libro_fecha_publicacion CHECK (fecha_publ
 
 -- Ejemplar
 ALTER TABLE Ejemplar ADD CONSTRAINT CHECK_Ejemplar_localizacion CHECK (REGEXP_LIKE(localizacion, '^[A-Za-záéíóúÁÉÍÓÚüÜñÑ ]+$'));
-ALTER TABLE Ejemplar ADD CONSTRAINT CHECK_Ejemplar_fecha_adquisicion CHECK (fecha_adquisicion <= TO_DATE('31/12/2025', 'DD/MM/YYYY'));
-ALTER TABLE Ejemplar ADD CONSTRAINT CHECK_Ejemplar_estado_fisico CHECK (estado_fisico IN ('Desgastado', 'Bueno', 'Dañado', 'Restaurado', 'Perdido', 'Nuevo'));
+ALTER TABLE Ejemplar ADD CONSTRAINT CHECK_Ejemplar_fechaAdquisicion CHECK (fechaAdquisicion <= TO_DATE('31/12/2025', 'DD/MM/YYYY'));
+ALTER TABLE Ejemplar ADD CONSTRAINT CHECK_Ejemplar_estadoFisico CHECK (estadoFisico IN ('Desgastado', 'Bueno', 'Dañado', 'Restaurado', 'Perdido', 'Nuevo'));
 
 -- Edicion
 ALTER TABLE Edicion ADD CONSTRAINT CHECK_Edicion_año CHECK (año <= TO_DATE('31/12/2025', 'DD/MM/YYYY'));
@@ -46,7 +46,7 @@ ALTER TABLE Editorial ADD CONSTRAINT CHECK_Editorial_pais CHECK (REGEXP_LIKE(pai
 
 -- Producto_Compra
 ALTER TABLE Producto_Compra ADD CONSTRAINT CHECK_Producto_Compra_cantidad CHECK (cantidad > 0);
-ALTER TABLE Producto_Compra ADD CONSTRAINT CHECK_Producto_Compra_precio_unidad CHECK (precio_unidad > 0.0);
+ALTER TABLE Producto_Compra ADD CONSTRAINT CHECK_Producto_Compra_precioUnidad CHECK (precioUnidad > 0.0);
 
 -- Compra
 ALTER TABLE Compra ADD CONSTRAINT CHECK_Compra_fecha CHECK (fecha <= TO_DATE('31/12/2025', 'DD/MM/YYYY'));

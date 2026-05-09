@@ -2,7 +2,7 @@
 --- ACCIONES: Definición de acciones de referencia
 ---------------------------------------------------------------------------------------------
 
--- Libro.id_categoria → Categoria(id)  |  ON DELETE SET NULL
+-- Libro.idCategoria → Categoria(id)  |  ON DELETE SET NULL
 BEGIN
     FOR r IN (SELECT constraint_name FROM user_constraints
         WHERE table_name = 'LIBRO'
@@ -16,9 +16,9 @@ BEGIN
 END;
 /
 ALTER TABLE Libro ADD CONSTRAINT FK_Libro_Categoria
-    FOREIGN KEY (id_categoria) REFERENCES Categoria(id) ON DELETE SET NULL;
+    FOREIGN KEY (idCategoria) REFERENCES Categoria(id) ON DELETE SET NULL;
 
--- Edicion.id_libro → Libro(id)  |  ON DELETE CASCADE
+-- Edicion.idLibro → Libro(id)  |  ON DELETE CASCADE
 BEGIN
     FOR r IN (SELECT constraint_name FROM user_constraints
         WHERE table_name = 'EDICION'
@@ -32,9 +32,9 @@ BEGIN
 END;
 /
 ALTER TABLE Edicion ADD CONSTRAINT FK_Edicion_Libro
-    FOREIGN KEY (id_libro) REFERENCES Libro(id) ON DELETE CASCADE;
+    FOREIGN KEY (idLibro) REFERENCES Libro(id) ON DELETE CASCADE;
 
--- Edicion.id_editorial → Editorial(id)  |  ON DELETE SET NULL
+-- Edicion.idEditorial → Editorial(id)  |  ON DELETE SET NULL
 BEGIN
     FOR r IN (SELECT constraint_name FROM user_constraints
         WHERE table_name = 'EDICION'
@@ -48,9 +48,9 @@ BEGIN
 END;
 /
 ALTER TABLE Edicion ADD CONSTRAINT FK_Edicion_Editorial
-    FOREIGN KEY (id_editorial) REFERENCES Editorial(id) ON DELETE SET NULL;
+    FOREIGN KEY (idEditorial) REFERENCES Editorial(id) ON DELETE SET NULL;
 
--- Ejemplar.id_edicion → Edicion(id)  |  ON DELETE CASCADE
+-- Ejemplar.idEdicion → Edicion(id)  |  ON DELETE CASCADE
 BEGIN
     FOR r IN (SELECT constraint_name FROM user_constraints
         WHERE table_name = 'EJEMPLAR'
@@ -64,9 +64,9 @@ BEGIN
 END;
 /
 ALTER TABLE Ejemplar ADD CONSTRAINT FK_Ejemplar_Edicion
-    FOREIGN KEY (id_edicion) REFERENCES Edicion(id) ON DELETE CASCADE;
+    FOREIGN KEY (idEdicion) REFERENCES Edicion(id) ON DELETE CASCADE;
 
--- Compra.id_proveedor → Proveedor(id)  |  ON DELETE SET NULL
+-- Compra.idProveedor → Proveedor(id)  |  ON DELETE SET NULL
 BEGIN
     FOR r IN (SELECT constraint_name FROM user_constraints
         WHERE table_name = 'COMPRA'
@@ -80,9 +80,9 @@ BEGIN
 END;
 /
 ALTER TABLE Compra ADD CONSTRAINT FK_Compra_Proveedor
-    FOREIGN KEY (id_proveedor) REFERENCES Proveedor(id) ON DELETE SET NULL;
+    FOREIGN KEY (idProveedor) REFERENCES Proveedor(id) ON DELETE SET NULL;
 
--- Producto_Compra.id_compra → Compra(id)  |  ON DELETE CASCADE
+-- Producto_Compra.idCompra → Compra(id)  |  ON DELETE CASCADE
 BEGIN
     FOR r IN (SELECT constraint_name FROM user_constraints
         WHERE table_name = 'PRODUCTO_COMPRA'
@@ -96,9 +96,9 @@ BEGIN
 END;
 /
 ALTER TABLE Producto_Compra ADD CONSTRAINT FK_ProductoCompra_Compra
-    FOREIGN KEY (id_compra) REFERENCES Compra(id) ON DELETE CASCADE;
+    FOREIGN KEY (idCompra) REFERENCES Compra(id) ON DELETE CASCADE;
 
--- Producto_Compra.id_libro → Libro(id)  |  ON DELETE SET NULL
+-- Producto_Compra.idLibro → Libro(id)  |  ON DELETE SET NULL
 BEGIN
     FOR r IN (SELECT constraint_name FROM user_constraints
         WHERE table_name = 'PRODUCTO_COMPRA'
@@ -112,9 +112,9 @@ BEGIN
 END;
 /
 ALTER TABLE Producto_Compra ADD CONSTRAINT FK_ProductoCompra_Libro
-    FOREIGN KEY (id_libro) REFERENCES Libro(id) ON DELETE SET NULL;
+    FOREIGN KEY (idLibro) REFERENCES Libro(id) ON DELETE SET NULL;
 
--- Administrador.id_usuario → Usuario(id)  |  ON DELETE CASCADE
+-- Administrador.idUsuario → Usuario(id)  |  ON DELETE CASCADE
 BEGIN
     FOR r IN (SELECT constraint_name FROM user_constraints
         WHERE table_name = 'ADMINISTRADOR'
@@ -128,15 +128,15 @@ BEGIN
 END;
 /
 ALTER TABLE Administrador ADD CONSTRAINT FK_Administrador_Usuario
-    FOREIGN KEY (id_usuario) REFERENCES Usuario(id) ON DELETE CASCADE;
+    FOREIGN KEY (idUsuario) REFERENCES Usuario(id) ON DELETE CASCADE;
 
 -- Libro_Autor: tabla nueva con sus FKs CASCADE
 CREATE TABLE Libro_Autor (
-    id_libro VARCHAR2(10),
+    idLibro VARCHAR2(10),
     id_autor VARCHAR2(10)
 );
-ALTER TABLE Libro_Autor ADD PRIMARY KEY (id_libro, id_autor);
+ALTER TABLE Libro_Autor ADD PRIMARY KEY (idLibro, id_autor);
 ALTER TABLE Libro_Autor ADD CONSTRAINT FK_LibroAutor_Libro
-    FOREIGN KEY (id_libro) REFERENCES Libro(id) ON DELETE CASCADE;
+    FOREIGN KEY (idLibro) REFERENCES Libro(id) ON DELETE CASCADE;
 ALTER TABLE Libro_Autor ADD CONSTRAINT FK_LibroAutor_Autor
     FOREIGN KEY (id_autor) REFERENCES Autor(id) ON DELETE CASCADE;

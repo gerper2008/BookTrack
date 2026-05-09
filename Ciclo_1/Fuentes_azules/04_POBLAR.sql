@@ -22,12 +22,12 @@ INSERT INTO Libro VALUES ('LIB001', 'Cien Anos de Soledad',    TO_DATE('1967-06-
 INSERT INTO Libro VALUES ('LIB002', 'Ficciones',               TO_DATE('1944-01-01','YYYY-MM-DD'), 'Espanol', 'Coleccion de cuentos fantasticos de Borges','CAT001');
 INSERT INTO Libro VALUES ('LIB003', 'La Casa de los Espiritus',TO_DATE('1982-10-01','YYYY-MM-DD'), 'Espanol', 'Saga familiar con elementos magicos chilenos','CAT001');
 
--- Edicion (id, año, paginas, id_libro, id_editorial)
+-- Edicion (id, año, paginas, idLibro, idEditorial)
 INSERT INTO Edicion VALUES ('EDI001', TO_DATE('2000-01-01','YYYY-MM-DD'), 432, 'LIB001', 'ED001');
 INSERT INTO Edicion VALUES ('EDI002', TO_DATE('2005-06-15','YYYY-MM-DD'), 200, 'LIB002', 'ED002');
 INSERT INTO Edicion VALUES ('EDI003', TO_DATE('2010-03-20','YYYY-MM-DD'), 350, 'LIB003', 'ED003');
 
--- Ejemplar (id, estado_fisico, disponibilidad, localizacion, fecha_adquisicion, id_edicion)
+-- Ejemplar (id, estadoFisico, disponibilidad, localizacion, fecha_adquisicion, idEdicion)
 INSERT INTO Ejemplar VALUES ('EJE001', 'Nuevo',   1, 'Estante A uno',  TO_DATE('2021-01-10','YYYY-MM-DD'), 'EDI001');
 INSERT INTO Ejemplar VALUES ('EJE002', 'Bueno',   1, 'Estante B tres', TO_DATE('2020-05-22','YYYY-MM-DD'), 'EDI002');
 INSERT INTO Ejemplar VALUES ('EJE003', 'Dañado',  0, 'Bodega central', TO_DATE('2019-08-15','YYYY-MM-DD'), 'EDI003');
@@ -50,7 +50,7 @@ INSERT INTO Compra VALUES ('CMP001', TO_DATE('2024-01-15','YYYY-MM-DD'), 350000.
 INSERT INTO Compra VALUES ('CMP002', TO_DATE('2024-03-10','YYYY-MM-DD'), 180000.00, 'COMPLETADO', 'PRV002');
 INSERT INTO Compra VALUES ('CMP003', TO_DATE('2024-06-20','YYYY-MM-DD'),  95000.00, 'PENDIENTE',  'PRV003');
 
--- Producto_Compra (id, cantidad, precio_unidad, id_compra, id_libro)
+-- Producto_Compra (id, cantidad, precioUnidad, idCompra, idLibro)
 INSERT INTO Producto_Compra VALUES ('PC001', 5, 70000.00, 'CMP001', 'LIB001');
 INSERT INTO Producto_Compra VALUES ('PC002', 3, 60000.00, 'CMP002', 'LIB002');
 INSERT INTO Producto_Compra VALUES ('PC003', 2, 47500.00, 'CMP003', 'LIB003');
@@ -76,28 +76,28 @@ INSERT INTO Editorial VALUES ('ED001', 'nuevo@correo.com', '3000000001', 'Editor
 
 -- ===== VIOLACIONES DE CLAVE FORANEA (FK a registro inexistente) =====
 
--- Libro con id_categoria que no existe
+-- Libro con idCategoria que no existe
 INSERT INTO Libro VALUES ('LIB099', 'Libro Huerfano', TO_DATE('2020-01-01','YYYY-MM-DD'), 'Espanol', 'Sin categoria valida', 'CAT999');
 
--- Edicion con id_libro que no existe
+-- Edicion con idLibro que no existe
 INSERT INTO Edicion VALUES ('EDI099', TO_DATE('2024-01-01','YYYY-MM-DD'), 100, 'LIB999', 'ED001');
 
--- Edicion con id_editorial que no existe
+-- Edicion con idEditorial que no existe
 INSERT INTO Edicion VALUES ('EDI098', TO_DATE('2024-01-01','YYYY-MM-DD'), 200, 'LIB001', 'ED999');
 
--- Ejemplar con id_edicion que no existe
+-- Ejemplar con idEdicion que no existe
 INSERT INTO Ejemplar VALUES ('EJE099', 'Nuevo', 1, 'Estante Z nueve', TO_DATE('2024-01-01','YYYY-MM-DD'), 'EDI999');
 
--- Compra con id_proveedor que no existe
+-- Compra con idProveedor que no existe
 INSERT INTO Compra VALUES ('CMP099', TO_DATE('2024-06-01','YYYY-MM-DD'), 99999.00, 'COMPLETADO', 'PRV999');
 
--- Producto_Compra con id_compra que no existe
+-- Producto_Compra con idCompra que no existe
 INSERT INTO Producto_Compra VALUES ('PC099', 1, 50000.00, 'CMP999', 'LIB001');
 
--- Producto_Compra con id_libro que no existe
+-- Producto_Compra con idLibro que no existe
 INSERT INTO Producto_Compra VALUES ('PC098', 1, 50000.00, 'CMP001', 'LIB999');
 
--- Administrador con id_usuario que no existe
+-- Administrador con idUsuario que no existe
 INSERT INTO Administrador VALUES ('USR999', 'Total', 'Sede Norte');
 
 -- ===== VIOLACIONES DE CLAVE UNICA (UNIQUE) =====

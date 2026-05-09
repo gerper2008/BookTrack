@@ -39,7 +39,7 @@ INSERT INTO Compra VALUES ('CERR2', TO_DATE('2024-09-10','YYYY-MM-DD'), -1.00, '
 -- TUP2-NOK: Producto_Compra con cantidad = 0  ✗
 INSERT INTO Producto_Compra VALUES ('PCER1', 0, 30000.00, 'CMP001', 'LIB001');
 
--- TUP2-NOK: Producto_Compra con precio_unidad negativo  ✗
+-- TUP2-NOK: Producto_Compra con precioUnidad negativo  ✗
 INSERT INTO Producto_Compra VALUES ('PCER2', 2, -1000.00, 'CMP001', 'LIB001');
 
 -- TUP3-NOK: Ejemplar Nuevo con disponibilidad = FALSE  ✗
@@ -55,30 +55,30 @@ INSERT INTO Libro VALUES ('LERR1', 'Sin Idioma', TO_DATE('2020-01-01','YYYY-MM-D
 --- PRUEBAS: AccionesOK -> Verificación de las acciones de referencia
 ---------------------------------------------------------------------------------------------
 
--- SET NULL: Al eliminar una Categoria, los Libros quedan con id_categoria = NULL
+-- SET NULL: Al eliminar una Categoria, los Libros quedan con idCategoria = NULL
 DELETE FROM Categoria WHERE id = 'CAT002';
--- Verificar: SELECT id, titulo, id_categoria FROM Libro WHERE id_categoria IS NULL;
+-- Verificar: SELECT id, titulo, idCategoria FROM Libro WHERE idCategoria IS NULL;
 
 -- CASCADE Edicion→Ejemplar: Al eliminar una Edicion, sus Ejemplares desaparecen
 DELETE FROM Edicion WHERE id = 'EDI003';
--- Verificar: SELECT * FROM Ejemplar WHERE id_edicion = 'EDI003'; → Sin resultado
+-- Verificar: SELECT * FROM Ejemplar WHERE idEdicion = 'EDI003'; → Sin resultado
 
 -- CASCADE Libro→Edicion: Al eliminar un Libro, sus Ediciones (y en cascada Ejemplares) desaparecen
 DELETE FROM Libro WHERE id = 'LIB002';
--- Verificar: SELECT * FROM Edicion WHERE id_libro = 'LIB002';    → Sin resultado
--- Verificar: SELECT * FROM Ejemplar WHERE id_edicion = 'EDI002'; → Sin resultado
+-- Verificar: SELECT * FROM Edicion WHERE idLibro = 'LIB002';    → Sin resultado
+-- Verificar: SELECT * FROM Ejemplar WHERE idEdicion = 'EDI002'; → Sin resultado
 
--- SET NULL: Al eliminar un Proveedor, las Compras quedan con id_proveedor = NULL
+-- SET NULL: Al eliminar un Proveedor, las Compras quedan con idProveedor = NULL
 DELETE FROM Proveedor WHERE id = 'PRV003';
--- Verificar: SELECT id, id_proveedor FROM Compra WHERE id = 'CMP003'; → id_proveedor = NULL
+-- Verificar: SELECT id, idProveedor FROM Compra WHERE id = 'CMP003'; → idProveedor = NULL
 
 -- CASCADE Compra→Producto_Compra: Al eliminar una Compra, sus productos desaparecen
 DELETE FROM Compra WHERE id = 'CMP001';
--- Verificar: SELECT * FROM Producto_Compra WHERE id_compra = 'CMP001'; → Sin resultado
+-- Verificar: SELECT * FROM Producto_Compra WHERE idCompra = 'CMP001'; → Sin resultado
 
 -- CASCADE Usuario→Administrador: Al eliminar el Usuario, se elimina el Administrador
 DELETE FROM Usuario WHERE id = 'USR001';
--- Verificar: SELECT * FROM Administrador WHERE id_usuario = 'USR001'; → Sin resultado
+-- Verificar: SELECT * FROM Administrador WHERE idUsuario = 'USR001'; → Sin resultado
 
 ---------------------------------------------------------------------------------------------
 --- PRUEBAS: DisparadoresOK -> Datos ingresados usando la automatización de disparadores
