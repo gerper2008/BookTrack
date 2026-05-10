@@ -35,7 +35,7 @@ ALTER TABLE Ejemplar ADD CONSTRAINT CHECK_Ejemplar_fechaAdquisicion CHECK (fecha
 ALTER TABLE Ejemplar ADD CONSTRAINT CHECK_Ejemplar_estadoFisico CHECK (estadoFisico IN ('Desgastado', 'Bueno', 'Dañado', 'Restaurado', 'Perdido', 'Nuevo'));
 
 -- Edicion
-ALTER TABLE Edicion ADD CONSTRAINT CHECK_Edicion_año CHECK (año <= TO_DATE('31/12/2025', 'DD/MM/YYYY'));
+ALTER TABLE Edicion ADD CONSTRAINT CHECK_Edicion_anio CHECK (anio <= TO_DATE('31/12/2025', 'DD/MM/YYYY'));
 ALTER TABLE Edicion ADD CONSTRAINT CHECK_Edicion_paginas CHECK (paginas > 0);
 
 -- Editorial

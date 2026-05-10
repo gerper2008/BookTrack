@@ -18,7 +18,7 @@ CREATE TABLE Administrador (
 
 CREATE TABLE Categoria (
     id VARCHAR2(10),
-    nombre VARCHAR(50),
+    nombre VARCHAR2(50),
     descripcion VARCHAR2(100)
 );
 
@@ -47,7 +47,7 @@ CREATE TABLE Libro_Autor (
 CREATE TABLE Ejemplar (
     id VARCHAR2(10),
     estadoFisico VARCHAR2(30),
-    disponibilidad BOOLEAN,
+    disponibilidad CHAR(1),
     localizacion VARCHAR2(40),
     fechaAdquisicion DATE,
     idEdicion VARCHAR2(10)
@@ -55,8 +55,8 @@ CREATE TABLE Ejemplar (
 
 CREATE TABLE Edicion (
     id VARCHAR2(10),
-    año DATE,
-    paginas INT(3),
+    anio DATE,
+    paginas NUMBER(3),
     idLibro VARCHAR2(10),
     idEditorial VARCHAR2(10)
 );
@@ -71,8 +71,8 @@ CREATE TABLE Editorial (
 
 CREATE TABLE Producto_Compra (
     id VARCHAR2(10),
-    cantidad INT,
-    precioUnidad DECIMAL(10, 2),
+    cantidad NUMBER,
+    precioUnidad NUMBER(10,2),
     idCompra VARCHAR2(10),
     idLibro VARCHAR2(10)
 );
@@ -80,7 +80,7 @@ CREATE TABLE Producto_Compra (
 CREATE TABLE Compra (
     id VARCHAR2(10),
     fecha DATE,
-    total DECIMAL(10, 2),
+    total NUMBER(10,2),
     estado VARCHAR2(20),
     idProveedor VARCHAR2(10)
 );
