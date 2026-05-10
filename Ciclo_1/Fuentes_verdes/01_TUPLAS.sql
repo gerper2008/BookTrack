@@ -17,21 +17,22 @@ ALTER TABLE Compra ADD CONSTRAINT CH_Compra_estado_total
 --   y CHECK_Producto_Compra_precioUnidad). Esta constraint es redundante pero se
 --   conserva como documentación explícita de la regla de negocio conjunta.
 ALTER TABLE Producto_Compra ADD CONSTRAINT CH_ProductoCompra_importe
-    CHECK (cantidad > 0 AND precio_unidad > 0);
-
+CHECK (cantidad > 0 AND precioUnidad > 0
+);
 -- TUP3: En Ejemplar, si disponibilidad = 0 (no disponible), estadoFisico NO puede ser 'Nuevo'.
 -- Nota: Oracle anterior a 23c no tiene tipo BOOLEAN nativo. La columna disponibilidad
 --   se trata como NUMBER(1): 1 = disponible, 0 = no disponible.
 --   Se corrige 'FALSE' (string inválido) por comparación numérica.
 --   Se corrige también el nombre de columna: estado_fisico → estadoFisico (según DDL).
-ALTER TABLE Ejemplar
-ADD CONSTRAINT CH_Ejemplar_nuevo_disponible
-CHECK (
-    NOT (disponibilidad = 'FALSE' AND estado_fisico = 'Nuevo')
+ALTER TABLE Ejemplar ADD CONSTRAINT CH_Ejemplar_nuevo_disponible 
+CHECK (NOT (disponibilidad = 'N' AND estadoFisico = 'Nuevo')
 );
 
 -- TUP4: El año de la Edicion no puede ser anterior a la fecha_publicacion del Libro.
 --       Se implementa como disparador TRG_Edicion_Validar_Anio (ver sección Disparadores).
+ALTER TABLE Autor ADD CONSTRAINT CH_Autor_identidad 
+CHECK (nombre IS NOT NULL AND apellidos IS NOT NULL AND nacionalidad IS NOT NULL
+);
 
 -- TUP5: En Autor, nombre, apellidos y nacionalidad deben existir juntos
 ALTER TABLE Autor ADD CONSTRAINT CH_Autor_identidad
@@ -46,5 +47,6 @@ ALTER TABLE Libro ADD CONSTRAINT CH_Libro_titulo_idioma
 -- TUP7: En Autor, nombre, apellidos y nacionalidad son obligatorios en conjunto.
 -- Nota: CHECK (col IS NOT NULL) es equivalente a NOT NULL en cada columna.
 --   Se reemplaza por constraints NOT NULL directas, que son más eficientes.
-ALTER TABLE Autor ADD CONSTRAINT CH_Autor_nombre_apellidos_nacionalidad
-    CHECK (nombre IS NOT NULL AND apellidos IS NOT NULL nacionalidad IS NOT NULL);
+ALTER TABLE Autor ADD CONSTRAINT CH_Autor_nombre_apellidos_nacionalidad 
+CHECK (nombre IS NOT NULL AND apellidos IS NOT NULL AND nacionalidad IS NOT NULL
+);

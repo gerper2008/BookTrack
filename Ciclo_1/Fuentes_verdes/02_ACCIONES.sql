@@ -130,13 +130,3 @@ END;
 ALTER TABLE Administrador ADD CONSTRAINT FK_Administrador_Usuario
     FOREIGN KEY (idUsuario) REFERENCES Usuario(id) ON DELETE CASCADE;
 
--- Libro_Autor: tabla nueva con sus FKs CASCADE
-CREATE TABLE Libro_Autor (
-    idLibro VARCHAR2(10),
-    id_autor VARCHAR2(10)
-);
-ALTER TABLE Libro_Autor ADD PRIMARY KEY (idLibro, id_autor);
-ALTER TABLE Libro_Autor ADD CONSTRAINT FK_LibroAutor_Libro
-    FOREIGN KEY (idLibro) REFERENCES Libro(id) ON DELETE CASCADE;
-ALTER TABLE Libro_Autor ADD CONSTRAINT FK_LibroAutor_Autor
-    FOREIGN KEY (id_autor) REFERENCES Autor(id) ON DELETE CASCADE;
