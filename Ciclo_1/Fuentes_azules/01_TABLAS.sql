@@ -56,7 +56,7 @@ CREATE TABLE Ejemplar (
 CREATE TABLE Edicion (
     id VARCHAR2(10),
     año DATE,
-    paginas INT,
+    paginas INT(3),
     idLibro VARCHAR2(10),
     idEditorial VARCHAR2(10)
 );
