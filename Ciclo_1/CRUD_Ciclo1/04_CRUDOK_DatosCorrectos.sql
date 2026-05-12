@@ -1,104 +1,134 @@
 
-
 -- ============================================================
--- CRUDOK - INGRESO DE DATOS CORRECTOS
+-- 1. CATEGORIAS
+-- ============================================================
+BEGIN PC_CATEGORIA.AD_CATEGORIA('Tecnologia', 'Libros sobre informatica y software'); END;
+/
+BEGIN PC_CATEGORIA.AD_CATEGORIA('Arte',       'Libros sobre pintura y musica'); END;
+/
+BEGIN PC_CATEGORIA.AD_CATEGORIA('Derecho',    'Libros sobre leyes y jurisprudencia'); END;
+/
+ 
+-- ============================================================
+-- 2. AUTORES
+-- ============================================================
+BEGIN PC_AUTOR.AD_AUTOR('Camilo',  'Torres Restrepo', 'Masculino', 'Colombiana');    END;
+/
+BEGIN PC_AUTOR.AD_AUTOR('Toni',    'Morrison',        'Femenino',  'Estadounidense'); END;
+/
+BEGIN PC_AUTOR.AD_AUTOR('Haruki',  'Murakami',        'Masculino', 'Japonesa');       END;
+/
+ 
+-- ============================================================
+-- 3. EDITORIALES
+-- ============================================================
+BEGIN PC_EDITORIAL.AD_EDITORIAL('Tusquets', 'info@tusquets.com', '3400001111', 'Espana');   END;
+/
+BEGIN PC_EDITORIAL.AD_EDITORIAL('Debate',   'info@debate.com',   '3400002222', 'Espana');   END;
+/
+BEGIN PC_EDITORIAL.AD_EDITORIAL('Anagrama', 'info@anagrama.com', '3400003333', 'Espana');   END;
+/
+ 
+
+ 
+-- ============================================================
+-- 4. LIBROS (usando CAT001, CAT002, CAT004 que existen)
+-- ============================================================
+BEGIN PC_LIBRO.AD_LIBRO('CAT001', 'El Coronel no tiene quien le escriba', 'Novela corta de Garcia Marquez',       TO_DATE('1961-01-01','YYYY-MM-DD'), 'Espanol'); END;
+/
+BEGIN PC_LIBRO.AD_LIBRO('CAT002', 'La Voragine',                           'Novela sobre la selva colombiana',     TO_DATE('1924-11-24','YYYY-MM-DD'), 'Espanol'); END;
+/
+BEGIN PC_LIBRO.AD_LIBRO('CAT004', 'El Ser y la Nada',                      'Tratado de ontologia fenomenologica',  TO_DATE('1943-01-01','YYYY-MM-DD'), 'Espanol'); END;
+/
+ 
+
+ 
+-- ============================================================
+-- 5. LIBRO_AUTOR
+-- ============================================================
+BEGIN PC_LIBRO.AD_LIBRO_AUTOR('LIB005', 'AUT001'); END;
+/
+BEGIN PC_LIBRO.AD_LIBRO_AUTOR('LIB006', 'AUT002'); END;
+/
+BEGIN PC_LIBRO.AD_LIBRO_AUTOR('LIB007', 'AUT003'); END;
+/
+ 
+-- ============================================================
+-- 6. EDICIONES
+-- Libros nuevos LIB005-007 con editoriales nuevas EDT005-007
+-- ============================================================
+BEGIN PC_EDICION.AD_EDICION('LIB005', 'EDT005', TO_DATE('2001-03-10','YYYY-MM-DD'), 250); END;
+/
+BEGIN PC_EDICION.AD_EDICION('LIB006', 'EDT006', TO_DATE('2008-07-15','YYYY-MM-DD'), 310); END;
+/
+BEGIN PC_EDICION.AD_EDICION('LIB007', 'EDT007', TO_DATE('2012-09-20','YYYY-MM-DD'), 128); END;
+/
+ 
+-- Ver ids generados:
+SELECT id FROM Edicion ORDER BY id DESC FETCH FIRST 3 ROWS ONLY;
+ 
+-- ============================================================
+-- 7. EJEMPLARES
+-- Ediciones nuevas EDI004, EDI005, EDI006
+-- ============================================================
+BEGIN PC_EJEMPLAR.AD_EJEMPLAR('EDI004', 'Nuevo',      '1', 'Estante A dos', TO_DATE('2024-04-10','YYYY-MM-DD')); END;
+/
+BEGIN PC_EJEMPLAR.AD_EJEMPLAR('EDI005', 'Bueno',      '1', 'Estante B uno', TO_DATE('2024-05-15','YYYY-MM-DD')); END;
+/
+BEGIN PC_EJEMPLAR.AD_EJEMPLAR('EDI006', 'Desgastado', '0', 'Bodega norte',  TO_DATE('2023-12-20','YYYY-MM-DD')); END;
+/
+ 
+-- ============================================================
+-- 8. COMPRAS
+-- Proveedores nuevos PRV005-007
+-- ============================================================
+BEGIN PC_COMPRA.AD_COMPRA('PRV003', TO_DATE('2025-01-15','YYYY-MM-DD'), 500000, 'PENDIENTE'); END;
+/
+BEGIN PC_COMPRA.AD_COMPRA('PRV002', TO_DATE('2025-02-20','YYYY-MM-DD'), 320000, 'PENDIENTE'); END;
+/
+BEGIN PC_COMPRA.AD_COMPRA('PRV001', TO_DATE('2025-03-10','YYYY-MM-DD'), 780000, 'PENDIENTE'); END;
+/
+ 
+-- Ver ids generados:
+SELECT id FROM Compra ORDER BY id DESC FETCH FIRST 3 ROWS ONLY;
+ 
+-- ============================================================
+-- 9. PRODUCTOS DE COMPRA
+-- Compras nuevas COM009, COM010, COM011 y libros LIB005-007
+-- ============================================================
+BEGIN PC_COMPRA.AD_PRODUCTO_COMPRA('COM009', 'LIB005', 6, 83000); END;
+/
+BEGIN PC_COMPRA.AD_PRODUCTO_COMPRA('COM010', 'LIB006', 4, 80000); END;
+/
+BEGIN PC_COMPRA.AD_PRODUCTO_COMPRA('COM011', 'LIB007', 5, 45000); END;
+/
+-- NOTA: estos procedimientos solo funcionan la segunda vez.
+-- Si se ejecutan de nuevo, los usuarios se duplican con nuevos ids
+-- y los administradores fallan porque USR004-006 ya tienen registro
+-- en la tabla Administrador (restriccion de PK).
+-- ============================================================
+-- 10. USUARIOS
 -- ============================================================
 
--- OK-01: Insertar usuario administrador
-BEGIN PC_USUARIO.AD_USUARIO('admin@booktrack.com', 'Administrador', 'Laura', 'Mendez', '3156789012'); END;
+
+BEGIN PC_USUARIO.AD_USUARIO('zz1@booktrack.com', 'Administrador', 'Carlos',  'Mendez Rios',  '3600001111'); END;
 /
--- OK-02: Registrar administrador (permisos segun CHECK: 'Solo Lectura', 'Operativo', 'Total')
-BEGIN PC_USUARIO.AD_ADMINISTRADOR('USR001', 'Total', 'Sede Central'); END;
+BEGIN PC_USUARIO.AD_USUARIO('zz2@booktrack.com', 'Bibliotecario', 'Marcela', 'Suarez Lopez', '3600002222'); END;
 /
--- OK-03: Modificar administrador cambiando permisos
-BEGIN PC_USUARIO.MOD_ADMINISTRADOR('USR001', 'Operativo', 'Sede Norte'); END;
-/
--- OK-04: Consultar usuarios por rol
-DECLARE cur SYS_REFCURSOR; BEGIN cur := PC_USUARIO.CO_USUARIO_ROL('Administrador'); END;
-/
--- OK-05: Consultar todos los administradores
-DECLARE cur SYS_REFCURSOR; BEGIN cur := PC_USUARIO.CO_ADMINISTRADORES(); END;
+BEGIN PC_USUARIO.AD_USUARIO('zz3@booktrack.com', 'Lector',        'Andres',  'Florez Pinto', '3600003333'); END;
 /
  
--- A partir de aqui los TRG_SOLO_ADMIN_* dejan pasar porque USR001 esta en Administrador
+-- Ver ids generados:
+SELECT id FROM Usuario ORDER BY id DESC FETCH FIRST 3 ROWS ONLY;
  
--- OK-06: Insertar categoria valida
-BEGIN PC_CATEGORIA.AD_CATEGORIA('Ficcion', 'Libros de genero ficcion literaria'); END;
+-- ============================================================
+-- 11. ADMINISTRADORES
+-- Usuarios nuevos USR004, USR005, USR006
+-- ============================================================
+BEGIN PC_USUARIO.AD_ADMINISTRADOR('USR004', 'Operativo',   'Sede Central');   END;
 /
--- OK-07: Insertar categoria sin descripcion (campo opcional)
-BEGIN PC_CATEGORIA.AD_CATEGORIA('Ciencia', NULL); END;
+BEGIN PC_USUARIO.AD_ADMINISTRADOR('USR005', 'Solo Lectura','Sede Occidente'); END;
 /
--- OK-08: Consultar todas las categorias
-DECLARE cur SYS_REFCURSOR; BEGIN cur := PC_CATEGORIA.CO_CATEGORIA(); END;
-/
- 
--- OK-09: Insertar autor valido completo
-BEGIN PC_AUTOR.AD_AUTOR('Gabriel', 'Garcia Marquez', 'M', 'Colombiana'); END;
-/
--- OK-10: Insertar autor sin genero (campo opcional)
-BEGIN PC_AUTOR.AD_AUTOR('J.K.', 'Rowling', NULL, 'Britanica'); END;
-/
--- OK-11: Consultar todos los autores
-DECLARE cur SYS_REFCURSOR; BEGIN cur := PC_AUTOR.CO_AUTOR(); END;
-/
- 
--- OK-12: Insertar editorial valida
-BEGIN PC_EDITORIAL.AD_EDITORIAL('Planeta', 'contacto@planeta.com', '3001234567', 'Colombia'); END;
-/
--- OK-13: Insertar segunda editorial
-BEGIN PC_EDITORIAL.AD_EDITORIAL('Alfaguara', 'info@alfaguara.com', '3009876543', 'Espana'); END;
-/
--- OK-14: Modificar editorial existente (correo diferente para no violar UNIQUE)
-BEGIN PC_EDITORIAL.MOD_EDITORIAL('EDT001', 'Planeta', 'planeta_nuevo@planeta.com', '3001234567', 'Colombia'); END;
-/
--- OK-15: Consultar todas las editoriales
-DECLARE cur SYS_REFCURSOR; BEGIN cur := PC_EDITORIAL.CO_EDITORIAL(); END;
-/
- 
--- OK-16: Insertar libro valido
-BEGIN PC_LIBRO.AD_LIBRO('CAT001', 'Cien Anos de Soledad', 'Novela del realismo magico', TO_DATE('1967-05-30','YYYY-MM-DD'), 'Espanol'); END;
-/
--- OK-17: Insertar libro sin descripcion (campo opcional)
-BEGIN PC_LIBRO.AD_LIBRO('CAT001', 'El Amor en los Tiempos del Colera', NULL, TO_DATE('1985-01-01','YYYY-MM-DD'), 'Espanol'); END;
-/
--- OK-18: Asociar libro con autor
-BEGIN PC_LIBRO.AD_LIBRO_AUTOR('LIB001', 'AUT001'); END;
-/
--- OK-19: Consultar libros por categoria
-DECLARE cur SYS_REFCURSOR; BEGIN cur := PC_LIBRO.CO_LIBRO_CAT('CAT001'); END;
-/
- 
--- OK-20: Insertar edicion de libro
-BEGIN PC_EDICION.AD_EDICION('LIB001', 'EDC001', TO_DATE('2000-01-01','YYYY-MM-DD'), 471); END;
-/
--- OK-21: Modificar edicion existente
-BEGIN PC_EDICION.MOD_EDICION('EDI001', 'LIB001', 'EDC001', TO_DATE('2005-01-01','YYYY-MM-DD'), 500); END;
-/
--- OK-23: Insertar ejemplar de edicion
-BEGIN PC_EJEMPLAR.AD_EJEMPLAR('EDI001', 'Bueno', 'S', 'Estante Principal', TO_DATE('2023-01-15','YYYY-MM-DD')); END;
-/
--- OK-24: Insertar segundo ejemplar
-BEGIN PC_EJEMPLAR.AD_EJEMPLAR('EDI001', 'Nuevo', 'S', 'Estante Secundario', TO_DATE('2024-06-01','YYYY-MM-DD')); END;
-/
--- OK-25: Modificar estado fisico de ejemplar
-BEGIN PC_EJEMPLAR.MOD_EJEMPLAR('EJE001', 'Desgastado', 'S', 'Estante Principal'); END;
-/
--- OK-26: Insertar proveedor valido
-BEGIN PC_PROVEEDOR.AD_PROVEEDOR('Carlos', 'Lopez', 'carlos@distrilibros.com', 'Distrilibros SAS', '3101234567'); END;
-/
--- OK-26b: Insertar compra valida (necesaria para OK-28 y OK-29)
-BEGIN PC_COMPRA.AD_COMPRA('PRV001', TO_DATE('2024-03-01','YYYY-MM-DD'), 850000, 'Pendiente'); END;
-/
--- OK-27: Modificar proveedor existente
-BEGIN PC_PROVEEDOR.MOD_PROVEEDOR('PRV001', 'Carlos', 'Lopez Ruiz', 'carlosnuevo@distrilibros.com', 'Distrilibros SAS', '3109876543'); END;
-/
--- OK-28: Agregar producto a compra
-BEGIN PC_COMPRA.AD_PRODUCTO_COMPRA('COM001', 'LIB001', 5, 170000); END;
-/
--- OK-29: Modificar estado de compra
-BEGIN PC_COMPRA.MOD_COMPRA('COM001', TO_DATE('2024-03-01','YYYY-MM-DD'), 850000, 'Completada'); END;
-/
--- OK-30: Consultar productos de una compra
-DECLARE cur SYS_REFCURSOR; BEGIN cur := PC_COMPRA.CO_PRODUCTOS_COMPRA('COM001'); END;
+BEGIN PC_USUARIO.AD_ADMINISTRADOR('USR006', 'Total',       'Sede Sur');       END;
 /
 

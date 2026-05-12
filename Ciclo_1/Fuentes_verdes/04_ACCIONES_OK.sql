@@ -1,7 +1,6 @@
 ---------------------------------------------------------------------------------------------
 -- TUPLAS OK
 ---------------------------------------------------------------------------------------------
- SELECT id, estado, total FROM Compra;
 -- TUP1 OK: estado COMPLETADO con total > 0
 INSERT INTO Compra VALUES ('CMP004', TO_DATE('2024-07-01','YYYY-MM-DD'), 200000.00, 'COMPLETADO', 'PRV001');
  
@@ -76,7 +75,7 @@ INSERT INTO Proveedor(nombre, apellidos, correo, empresa, telefono) VALUES ('Lau
 COMMIT;
 
 ---------------------------------------------------------------------------------------------
---- PRUEBAS: AccionesOK -> Acciones de referencia
+--- ACCIONES OK -> Acciones de referencia
 ---------------------------------------------------------------------------------------------
 
 -- SET NULL: Al eliminar Categoria, Libros quedan con idCategoria = NULL

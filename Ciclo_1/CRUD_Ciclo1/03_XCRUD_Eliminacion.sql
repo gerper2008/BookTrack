@@ -12,3 +12,18 @@ DROP PACKAGE PC_EJEMPLAR;
 DROP PACKAGE PC_PROVEEDOR;
 DROP PACKAGE PC_COMPRA;
 DROP PACKAGE PC_USUARIO;
+
+SELECT id, nombre FROM Categoria
+UNION ALL
+SELECT id, nombre FROM Autor
+UNION ALL
+SELECT id, nombre FROM Editorial
+UNION ALL
+SELECT id, titulo FROM Libro
+UNION ALL
+SELECT id, nombre FROM Proveedor
+UNION ALL
+SELECT id, correo FROM Usuario;
+SELECT id, idLibro FROM Edicion;
+SELECT id, idEdicion FROM Ejemplar;
+SELECT id, estado FROM Compra;
