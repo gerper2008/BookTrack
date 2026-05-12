@@ -152,3 +152,5 @@ INSERT INTO Libro VALUES ('LIB098', 'Libro Futuro', TO_DATE('2099-01-01','YYYY-M
 
 -- Permisos invalidos en Administrador  (valores validos: 'Solo Lectura', 'Operativo', 'Total')
 INSERT INTO Administrador VALUES ('USR002', 'X', 'Sede Sur');
+
+
