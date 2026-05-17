@@ -21,6 +21,8 @@ ALTER TABLE Usuario ADD UNIQUE(correo);
 ALTER TABLE Proveedor ADD UNIQUE(correo);
 ALTER TABLE Editorial ADD UNIQUE(correo);
 ALTER TABLE Editorial ADD UNIQUE(telefono);
+ALTER TABLE Categoria ADD UNIQUE(nombre);
+ALTER TABLE Autor ADD CONSTRAINT UQ_Autor_Nombre_Apellidos UNIQUE (nombre, apellidos);
 
 ---------------------------------------------------------------------------------------------
 --- PERSISTENCIA: FORANEAS -> Definición de claves foraneas

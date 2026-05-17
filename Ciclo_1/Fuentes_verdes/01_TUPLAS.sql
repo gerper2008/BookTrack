@@ -25,4 +25,3 @@ ALTER TABLE Libro ADD CONSTRAINT CH_Libro_titulo_idioma
 -- TUP6: Autor: nombre, apellidos y nacionalidad obligatorios
 ALTER TABLE Autor ADD CONSTRAINT CH_Autor_identidad
     CHECK (nombre IS NOT NULL AND apellidos IS NOT NULL AND nacionalidad IS NOT NULL);
-
