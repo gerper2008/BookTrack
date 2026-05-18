@@ -293,7 +293,7 @@ CREATE OR REPLACE PACKAGE BODY PK_ADMINISTRADOR AS
     ------------------------------------------------------------
     -- EJEMPLAR
     ------------------------------------------------------------
-    PROCEDURE AD_EJEMPLAR (xID_EDICION IN VARCHAR2, xESTADO_FISICO IN VARCHAR2, xDISPONIBILIDAD IN BOOLEAN, xLOCALIZACION IN VARCHAR2, xFECHA_ADQ IN DATE) IS
+    PROCEDURE AD_EJEMPLAR (xID_EDICION IN VARCHAR2, xESTADO_FISICO IN VARCHAR2, xDISPONIBILIDAD IN NUMBER, xLOCALIZACION IN VARCHAR2, xFECHA_ADQ IN DATE) IS
     BEGIN
         -- TUP3: no puede ser disponibilidad=0 y estadoFisico='Nuevo'
         IF xDISPONIBILIDAD = 0 AND xESTADO_FISICO = 'Nuevo' THEN
@@ -306,7 +306,7 @@ CREATE OR REPLACE PACKAGE BODY PK_ADMINISTRADOR AS
         WHEN OTHERS THEN ROLLBACK; RAISE;
     END AD_EJEMPLAR;
 
-    PROCEDURE MOD_EJEMPLAR (xID IN VARCHAR2, xESTADO_FISICO IN VARCHAR2, xDISPONIBILIDAD IN BOOLEAN, xLOCALIZACION IN VARCHAR2) IS
+    PROCEDURE MOD_EJEMPLAR (xID IN VARCHAR2, xESTADO_FISICO IN VARCHAR2, xDISPONIBILIDAD IN NUMBER, xLOCALIZACION IN VARCHAR2) IS
     BEGIN
         IF xDISPONIBILIDAD = 0 AND xESTADO_FISICO = 'Nuevo' THEN
             RAISE_APPLICATION_ERROR(-20016, 'Un ejemplar no disponible no puede tener estado Nuevo.');
@@ -482,13 +482,18 @@ CREATE OR REPLACE PACKAGE BODY PK_ADMINISTRADOR AS
     -- PRODUCTO_COMPRA
     ------------------------------------------------------------
     PROCEDURE AD_PRODUCTO_COMPRA (xID_COMPRA IN VARCHAR2, xID_LIBRO IN VARCHAR2, xCANTIDAD IN NUMBER, xPRECIO_UNIDAD IN NUMBER) IS
+        v_lastID NUMBER;
+        v_newID  VARCHAR2(10);
     BEGIN
         -- TUP2: cantidad y precioUnidad deben ser positivos
         IF xCANTIDAD <= 0 OR xPRECIO_UNIDAD <= 0 THEN
             RAISE_APPLICATION_ERROR(-20025, 'Cantidad y precio unitario deben ser mayores a cero.');
         END IF;
+        SELECT NVL(MAX(TO_NUMBER(SUBSTR(id, 4))), 0)
+        INTO v_lastID FROM Producto_Compra;
+        v_newID := 'PCO' || LPAD(v_lastID + 1, 3, '0');
         INSERT INTO Producto_Compra (id, idCompra, idLibro, cantidad, precioUnidad)
-        VALUES (SYS_GUID(), xID_COMPRA, xID_LIBRO, xCANTIDAD, xPRECIO_UNIDAD);
+        VALUES (v_newID, xID_COMPRA, xID_LIBRO, xCANTIDAD, xPRECIO_UNIDAD);
         COMMIT;
     EXCEPTION
         WHEN OTHERS THEN ROLLBACK; RAISE;
@@ -509,9 +514,14 @@ CREATE OR REPLACE PACKAGE BODY PK_ADMINISTRADOR AS
     -- USUARIO / ADMINISTRADOR
     ------------------------------------------------------------
     PROCEDURE AD_USUARIO (xCORREO IN VARCHAR2, xROL IN VARCHAR2, xNOMBRE IN VARCHAR2, xAPELLIDOS IN VARCHAR2, xTELEFONO IN VARCHAR2) IS
+        v_lastID NUMBER;
+        v_newID  VARCHAR2(10);
     BEGIN
+        SELECT NVL(MAX(TO_NUMBER(SUBSTR(id, 4))), 0)
+        INTO v_lastID FROM Usuario;
+        v_newID := 'USR' || LPAD(v_lastID + 1, 3, '0');
         INSERT INTO Usuario (id, correo, rol, nombre, apellidos, telefono)
-        VALUES (SYS_GUID(), xCORREO, xROL, xNOMBRE, xAPELLIDOS, xTELEFONO);
+        VALUES (v_newID, xCORREO, xROL, xNOMBRE, xAPELLIDOS, xTELEFONO);
         COMMIT;
     EXCEPTION
         WHEN DUP_VAL_ON_INDEX THEN
