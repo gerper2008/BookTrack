@@ -47,7 +47,7 @@ CREATE TABLE Libro_Autor (
 CREATE TABLE Ejemplar (
     id VARCHAR2(10),
     estadoFisico VARCHAR2(30),
-    disponibilidad CHAR(1),
+    disponibilidad BOOLEAN,
     localizacion VARCHAR2(40),
     fechaAdquisicion DATE,
     idEdicion VARCHAR2(10)

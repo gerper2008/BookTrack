@@ -28,9 +28,9 @@ INSERT INTO Edicion VALUES ('EDI002', TO_DATE('2005-06-15','YYYY-MM-DD'), 200, '
 INSERT INTO Edicion VALUES ('EDI003', TO_DATE('2010-03-20','YYYY-MM-DD'), 350, 'LIB003', 'ED003');
 
 -- Ejemplar (id, estadoFisico, disponibilidad, localizacion, fecha_adquisicion, idEdicion)
-INSERT INTO Ejemplar VALUES ('EJE001', 'Nuevo',   1, 'Estante A uno',  TO_DATE('2021-01-10','YYYY-MM-DD'), 'EDI001');
-INSERT INTO Ejemplar VALUES ('EJE002', 'Bueno',   1, 'Estante B tres', TO_DATE('2020-05-22','YYYY-MM-DD'), 'EDI002');
-INSERT INTO Ejemplar VALUES ('EJE003', 'Dañado',  0, 'Bodega central', TO_DATE('2019-08-15','YYYY-MM-DD'), 'EDI003');
+INSERT INTO Ejemplar VALUES ('EJE001', 'Nuevo',   TRUE, 'Estante A uno',  TO_DATE('2021-01-10','YYYY-MM-DD'), 'EDI001');
+INSERT INTO Ejemplar VALUES ('EJE002', 'Bueno',   TRUE, 'Estante B tres', TO_DATE('2020-05-22','YYYY-MM-DD'), 'EDI002');
+INSERT INTO Ejemplar VALUES ('EJE003', 'Dañado',  FALSE, 'Bodega central', TO_DATE('2019-08-15','YYYY-MM-DD'), 'EDI003');
 
 -- Proveedor
 INSERT INTO Proveedor VALUES ('PRV001', 'ventas@distribuidora.com', 'Carlos', 'Ramirez Torres',  'Distribuidora Nacional',  '3151112233');

@@ -178,7 +178,7 @@ CREATE OR REPLACE TRIGGER TRG_Ejemplar_Disponible
 BEFORE DELETE ON Ejemplar
 FOR EACH ROW
 BEGIN
-    IF :OLD.disponibilidad = 'DISPONIBLE' THEN
+    IF :OLD.disponibilidad = TRUE THEN
         RAISE_APPLICATION_ERROR(
             -20040,
             'No se puede eliminar el ejemplar "' || :OLD.id ||

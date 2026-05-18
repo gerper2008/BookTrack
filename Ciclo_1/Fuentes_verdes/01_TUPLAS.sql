@@ -12,9 +12,9 @@ ALTER TABLE Compra ADD CONSTRAINT CH_Compra_estado_total
 ALTER TABLE Producto_Compra ADD CONSTRAINT CH_ProductoCompra_importe
     CHECK (cantidad > 0 AND precioUnidad > 0);
 
--- TUP3: Ejemplar no disponible ('N') no puede ser 'Nuevo'
+-- TUP3: Ejemplar no disponible (FALSE) no puede ser 'Nuevo'
 ALTER TABLE Ejemplar ADD CONSTRAINT CH_Ejemplar_nuevo_disponible
-    CHECK (NOT (disponibilidad = '0' AND estadoFisico = 'Nuevo'));
+    CHECK (NOT (disponibilidad = FALSE AND estadoFisico = 'Nuevo'));
 
 -- TUP4: Edicion.anio >= fecha_publicacion del Libro → implementado como trigger
 

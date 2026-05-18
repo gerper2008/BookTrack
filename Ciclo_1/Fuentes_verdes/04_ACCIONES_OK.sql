@@ -15,14 +15,14 @@ INSERT INTO Producto_Compra VALUES ('PC004', 4, 55000.00, 'CMP004', 'LIB001');
 INSERT INTO Producto_Compra VALUES ('PC005', 1, 48000.00, 'CMP001', 'LIB002');
 COMMIT;
 
--- TUP3 OK: disponibilidad = 1 con estadoFisico = 'Nuevo' (combinacion permitida)
-INSERT INTO Ejemplar VALUES ('EJE004', 'Nuevo', 1, 'Estante C dos',  TO_DATE('2024-01-15','YYYY-MM-DD'), 'EDI001');
+-- TUP3 OK: disponibilidad = TRUE con estadoFisico = 'Nuevo' (combinacion permitida)
+INSERT INTO Ejemplar VALUES ('EJE004', 'Nuevo', TRUE, 'Estante C dos',  TO_DATE('2024-01-15','YYYY-MM-DD'), 'EDI001');
  
--- TUP3 OK: disponibilidad = 0 con estadoFisico = 'Bueno' (no es Nuevo, permitido)
-INSERT INTO Ejemplar VALUES ('EJE005', 'Bueno', 0, 'Bodega norte',   TO_DATE('2024-02-20','YYYY-MM-DD'), 'EDI002');
+-- TUP3 OK: disponibilidad = FALSE con estadoFisico = 'Bueno' (no es Nuevo, permitido)
+INSERT INTO Ejemplar VALUES ('EJE005', 'Bueno', FALSE, 'Bodega norte',   TO_DATE('2024-02-20','YYYY-MM-DD'), 'EDI002');
  
--- TUP3 OK: disponibilidad = 0 con estadoFisico = 'Desgastado' (permitido)
-INSERT INTO Ejemplar VALUES ('EJE006', 'Desgastado', 0, 'Bodega sur', TO_DATE('2023-11-10','YYYY-MM-DD'), 'EDI003');
+-- TUP3 OK: disponibilidad = FALSE con estadoFisico = 'Desgastado' (permitido)
+INSERT INTO Ejemplar VALUES ('EJE006', 'Desgastado', FALSE, 'Bodega sur', TO_DATE('2023-11-10','YYYY-MM-DD'), 'EDI003');
  
 -- TUP5 OK: titulo e idioma ambos presentes (NOT NULL)
 INSERT INTO Libro VALUES ('LIB004', 'El Amor en los Tiempos del Colera', TO_DATE('1985-09-05','YYYY-MM-DD'), 'Espanol', 'Romance en el caribe colombiano', 'CAT001');

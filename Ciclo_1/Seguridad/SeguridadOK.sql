@@ -160,8 +160,8 @@ END;
 -- ============================================================
 -- 8. EJEMPLARES
 -- estadoFisico: 'Desgastado'|'Bueno'|'Dañado'|'Restaurado'|'Perdido'|'Nuevo'
--- TUP3: disponibilidad=0 NO puede tener estadoFisico='Nuevo'
--- disponibilidad: 1 = disponible, 0 = no disponible
+-- TUP3: disponibilidad=FALSE NO puede tener estadoFisico='Nuevo'
+-- disponibilidad: TRUE = disponible, FALSE = no disponible
 -- fechaAdquisicion <= 31/12/2025
 -- localizacion: solo letras y espacios
 -- id → EJM001, EJM002...
@@ -173,11 +173,11 @@ BEGIN
     SELECT e.id INTO v_edicion
     FROM Edicion e JOIN Libro l ON e.idLibro = l.id
     WHERE l.titulo = 'Cien Anos de Soledad' AND ROWNUM = 1;
-    -- disponibilidad=1, estadoFisico='Nuevo' → válido (TUP3 solo prohíbe 0+'Nuevo')
-    PK_ADMINISTRADOR.AD_EJEMPLAR(v_edicion, 'Nuevo',      1, 'Estante A',  TO_DATE('10/01/2024','DD/MM/YYYY'));
-    PK_ADMINISTRADOR.AD_EJEMPLAR(v_edicion, 'Bueno',      1, 'Estante B',  TO_DATE('15/03/2023','DD/MM/YYYY'));
-    -- disponibilidad=0, estadoFisico='Dañado' → válido (no es 'Nuevo')
-    PK_ADMINISTRADOR.AD_EJEMPLAR(v_edicion, 'Dañado',     0, 'Deposito C', TO_DATE('20/05/2022','DD/MM/YYYY'));
+    -- disponibilidad=TRUE, estadoFisico='Nuevo' → válido (TUP3 solo prohíbe 0+'Nuevo')
+    PK_ADMINISTRADOR.AD_EJEMPLAR(v_edicion, 'Nuevo',      TRUE, 'Estante A',  TO_DATE('10/01/2024','DD/MM/YYYY'));
+    PK_ADMINISTRADOR.AD_EJEMPLAR(v_edicion, 'Bueno',      TRUE, 'Estante B',  TO_DATE('15/03/2023','DD/MM/YYYY'));
+    -- disponibilidad=FALSE, estadoFisico='Dañado' → válido (no es 'Nuevo')
+    PK_ADMINISTRADOR.AD_EJEMPLAR(v_edicion, 'Dañado',     FALSE, 'Deposito C', TO_DATE('20/05/2022','DD/MM/YYYY'));
 END;
 /
 DECLARE
@@ -186,8 +186,8 @@ BEGIN
     SELECT e.id INTO v_edicion
     FROM Edicion e JOIN Libro l ON e.idLibro = l.id
     WHERE l.titulo = 'La Casa de los Espiritus' AND ROWNUM = 1;
-    PK_ADMINISTRADOR.AD_EJEMPLAR(v_edicion, 'Bueno',      1, 'Estante D',  TO_DATE('05/07/2023','DD/MM/YYYY'));
-    PK_ADMINISTRADOR.AD_EJEMPLAR(v_edicion, 'Desgastado', 0, 'Deposito E', TO_DATE('01/02/2021','DD/MM/YYYY'));
+    PK_ADMINISTRADOR.AD_EJEMPLAR(v_edicion, 'Bueno',      TRUE, 'Estante D',  TO_DATE('05/07/2023','DD/MM/YYYY'));
+    PK_ADMINISTRADOR.AD_EJEMPLAR(v_edicion, 'Desgastado', FALSE, 'Deposito E', TO_DATE('01/02/2021','DD/MM/YYYY'));
 END;
 /
 
