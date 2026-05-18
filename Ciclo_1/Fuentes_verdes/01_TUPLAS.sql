@@ -14,14 +14,16 @@ ALTER TABLE Producto_Compra ADD CONSTRAINT CH_ProductoCompra_importe
 
 -- TUP3: Ejemplar no disponible (FALSE) no puede ser 'Nuevo'
 ALTER TABLE Ejemplar ADD CONSTRAINT CH_Ejemplar_nuevo_disponible
-    CHECK (NOT (disponibilidad = FALSE AND estadoFisico = 'Nuevo'));
+    CHECK (NOT (disponibilidad = 0 AND estadoFisico = 'Nuevo'));
 
 -- TUP4: Edicion.anio >= fecha_publicacion del Libro → implementado como trigger
 
 -- TUP5: Libro: titulo e idioma obligatorios juntos
-ALTER TABLE Libro ADD CONSTRAINT CH_Libro_titulo_idioma
-    CHECK (titulo IS NOT NULL AND idioma IS NOT NULL);
+ALTER TABLE Libro MODIFY titulo VARCHAR2(60) NOT NULL;
+ALTER TABLE Libro MODIFY idioma VARCHAR2(30) NOT NULL;
 
 -- TUP6: Autor: nombre, apellidos y nacionalidad obligatorios
-ALTER TABLE Autor ADD CONSTRAINT CH_Autor_identidad
-    CHECK (nombre IS NOT NULL AND apellidos IS NOT NULL AND nacionalidad IS NOT NULL);
+-- NOTA: Misma razón que TUP5 — IS NOT NULL en CHECK no funciona en Oracle.
+ALTER TABLE Autor MODIFY nombre VARCHAR2(60) NOT NULL;
+ALTER TABLE Autor MODIFY apellidos VARCHAR2(60) NOT NULL;
+ALTER TABLE Autor MODIFY nacionalidad VARCHAR2(50) NOT NULL;

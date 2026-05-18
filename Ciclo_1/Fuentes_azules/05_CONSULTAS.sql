@@ -52,7 +52,7 @@ SELECT
 FROM Ejemplar e
 LEFT JOIN Edicion ed ON ed.id = e.idEdicion
 LEFT JOIN Libro l ON l.id = ed.idLibro
-WHERE e.disponibilidad = 'TRUE'
+WHERE e.disponibilidad = 1
   AND e.localizacion = 'Sala A'
 ORDER BY titulo_libro, codigoEjemplar;
 

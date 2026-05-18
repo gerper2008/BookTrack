@@ -22,11 +22,16 @@ ALTER TABLE Edicion ADD CONSTRAINT FK_Edicion_Editorial
 ALTER TABLE Ejemplar ADD CONSTRAINT FK_Ejemplar_Edicion
     FOREIGN KEY (idEdicion) REFERENCES Edicion(id) ON DELETE CASCADE;
     
--- Libro_Autor.idAutor → Autor(id) - ON DELETE SET NULL
--- Si se elimina un autor, sus asociaciones con libros se conservan,
--- pero la referencia al autor queda en NULL.
+-- Libro_Autor.idAutor → Autor(id) - ON DELETE CASCADE
+-- SET NULL en columnas PK. Se usa CASCADE: si se elimina un autor, sus
+-- registros en Libro_Autor se eliminan en cascada.
 ALTER TABLE Libro_Autor ADD CONSTRAINT FK_LibroAutor_Autor
-    FOREIGN KEY (idAutor) REFERENCES Autor(id) ON DELETE SET NULL;
+    FOREIGN KEY (idAutor) REFERENCES Autor(id) ON DELETE CASCADE;
+
+-- Libro_Autor.idLibro → Libro(id) - ON DELETE CASCADE
+-- Si se elimina un libro, sus asociaciones con autores se eliminan en cascada.
+ALTER TABLE Libro_Autor ADD CONSTRAINT FK_LibroAutor_Libro
+    FOREIGN KEY (idLibro) REFERENCES Libro(id) ON DELETE CASCADE;
 
 -- Compra.idProveedor → Proveedor(id) - ON DELETE SET NULL
 -- Si se elimina el proveedor, el idProveedor de la compra queda nulo

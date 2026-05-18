@@ -50,8 +50,7 @@ CREATE TABLE Ejemplar (
     estadoFisico VARCHAR2(30),
     disponibilidad BOOLEAN,
     localizacion VARCHAR2(40),
-    fechaAdquisicion DATE,
-    idEdicion VARCHAR2(10)
+    fechaAdquisicion DATE
 );
 
 CREATE TABLE Edicion (
@@ -59,9 +58,7 @@ CREATE TABLE Edicion (
     idLibro VARCHAR2(10),
     idEditorial VARCHAR2(10),
     anio DATE,
-    paginas NUMBER(3),
-    idLibro VARCHAR2(10),
-    idEditorial VARCHAR2(10)
+    paginas NUMBER(3)
 );
 
 CREATE TABLE Editorial (

@@ -16,13 +16,13 @@ INSERT INTO Producto_Compra VALUES ('PC005', 1, 48000.00, 'CMP001', 'LIB002');
 COMMIT;
 
 -- TUP3 OK: disponibilidad = TRUE con estadoFisico = 'Nuevo' (combinacion permitida)
-INSERT INTO Ejemplar VALUES ('EJE004', 'Nuevo', TRUE, 'Estante C dos',  TO_DATE('2024-01-15','YYYY-MM-DD'), 'EDI001');
+INSERT INTO Ejemplar VALUES ('EJE004', 'Nuevo', 1, 'Estante C dos',  TO_DATE('2024-01-15','YYYY-MM-DD'), 'EDI001');
  
 -- TUP3 OK: disponibilidad = FALSE con estadoFisico = 'Bueno' (no es Nuevo, permitido)
-INSERT INTO Ejemplar VALUES ('EJE005', 'Bueno', FALSE, 'Bodega norte',   TO_DATE('2024-02-20','YYYY-MM-DD'), 'EDI002');
+INSERT INTO Ejemplar VALUES ('EJE005', 'Bueno', 0, 'Bodega norte',   TO_DATE('2024-02-20','YYYY-MM-DD'), 'EDI002');
  
 -- TUP3 OK: disponibilidad = FALSE con estadoFisico = 'Desgastado' (permitido)
-INSERT INTO Ejemplar VALUES ('EJE006', 'Desgastado', FALSE, 'Bodega sur', TO_DATE('2023-11-10','YYYY-MM-DD'), 'EDI003');
+INSERT INTO Ejemplar VALUES ('EJE006', 'Desgastado', 0, 'Bodega sur', TO_DATE('2023-11-10','YYYY-MM-DD'), 'EDI003');
  
 -- TUP5 OK: titulo e idioma ambos presentes (NOT NULL)
 INSERT INTO Libro VALUES ('LIB004', 'El Amor en los Tiempos del Colera', TO_DATE('1985-09-05','YYYY-MM-DD'), 'Espanol', 'Romance en el caribe colombiano', 'CAT001');
@@ -86,7 +86,7 @@ COMMIT;
 
 -- CASCADE: Insertar edicion limpia para LIB005 y borrarla sin ejemplares
 INSERT INTO Edicion(idLibro, idEditorial, anio, paginas)
-VALUES ('LIB005', 'ED001', TO_DATE('2020-01-01','YYYY-MM-DD'), 280);
+VALUES ('LIB005', 'EDT001', TO_DATE('2020-01-01','YYYY-MM-DD'), 280);
 COMMIT;
 
 DELETE FROM Edicion WHERE idLibro = 'LIB005';
@@ -145,7 +145,7 @@ EXEC PC_AUTOR.ELI_AUTOR('AUT001');
 
 -- DISP-13: Insertar Edicion con Libro inexistente
 -- Error esperado: ORA-20060 - El libro con id "LIB999" no existe en el catálogo
-EXEC PC_EDICION.AD_EDICION('LIB999', 'ED001', TO_DATE('2020-01-01','YYYY-MM-DD'), 300);
+EXEC PC_EDICION.AD_EDICION('LIB999', 'EDT001', TO_DATE('2020-01-01','YYYY-MM-DD'), 300);
 
 -- DISP-14: Insertar Edicion con Editorial inexistente
 -- Error esperado: ORA-20061 - La editorial con id "EDT999" no existe en el sistema
@@ -153,7 +153,7 @@ EXEC PC_EDICION.AD_EDICION('LIB001', 'EDT999', TO_DATE('2020-01-01','YYYY-MM-DD'
 
 -- DISP-15: Modificar idLibro de Edicion que tiene Ejemplares
 -- Error esperado: ORA-20062 - No se puede cambiar el origen de la edición porque posee ejemplares
-EXEC PC_EDICION.MOD_EDICION('EDI001', 'LIB002', 'ED001', TO_DATE('2000-01-01','YYYY-MM-DD'), 432);
+EXEC PC_EDICION.MOD_EDICION('EDI001', 'LIB002', 'EDT001', TO_DATE('2000-01-01','YYYY-MM-DD'), 432);
 
 -- DISP-16: Eliminar Edicion que tiene Ejemplares
 -- Error esperado: ORA-20063 - No se puede eliminar la edicion porque posee ejemplares
@@ -169,7 +169,7 @@ EXEC PC_EDITORIAL.AD_EDITORIAL('Otra Editorial', 'nueva@otra.com', '3001234567',
 
 -- DISP-20: Eliminar Editorial con Ediciones activas
 -- Error esperado: ORA-20072 - No se puede eliminar la editorial porque tiene ediciones
-EXEC PC_EDITORIAL.ELI_EDITORIAL('ED001');
+EXEC PC_EDITORIAL.ELI_EDITORIAL('EDT001');
 
 -- DISP-23: Insertar Compra con Proveedor inexistente
 -- Error esperado: ORA-20090 - El proveedor con id "PRV999" no existe en el sistema

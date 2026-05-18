@@ -178,7 +178,7 @@ CREATE OR REPLACE TRIGGER TRG_Ejemplar_Disponible
 BEFORE DELETE ON Ejemplar
 FOR EACH ROW
 BEGIN
-    IF :OLD.disponibilidad = TRUE THEN
+    IF :OLD.disponibilidad = 1 THEN
         RAISE_APPLICATION_ERROR(
             -20040,
             'No se puede eliminar el ejemplar "' || :OLD.id ||
@@ -201,60 +201,42 @@ BEGIN
 END TRG_Compra_Generar_Id;
 /
 
--- DISP-13: Estado inicial de Compra = 'PENDIENTE'
+-- DISP-13: Estado inicial de Compra = 'PENDIENTE' (siempre, sin importar el valor ingresado)
 CREATE OR REPLACE TRIGGER TRG_Compra_Estado_Inicial
 BEFORE INSERT ON Compra
 FOR EACH ROW
 BEGIN
-    IF :NEW.estado IS NULL THEN
-        :NEW.estado := 'PENDIENTE';
-    END IF;
+    :NEW.estado := 'PENDIENTE';
 END TRG_Compra_Estado_Inicial;
 /
 
--- DISP-14: Impide modificar una compra cuando ya existen
--- ejemplares físicos generados a partir de ella.
+-- DISP-14: Impide modificar una Compra si no está en estado PENDIENTE
+-- La restricción correcta es: solo se puede modificar una compra en estado PENDIENTE.
 CREATE OR REPLACE TRIGGER TRG_Compra_Modificacion_Sin_Ejemplares
 BEFORE UPDATE ON Compra
 FOR EACH ROW
-DECLARE
-    v_count NUMBER;
 BEGIN
-    SELECT COUNT(*)
-    INTO v_count
-    FROM Ejemplar
-    WHERE idCompra = :OLD.id;
-
-    IF v_count > 0 THEN
+    IF :OLD.estado != 'PENDIENTE' THEN
         RAISE_APPLICATION_ERROR(
             -20060,
             'No se puede modificar la compra "' || :OLD.id ||
-            '" porque posee ' || v_count ||
-            ' ejemplar(es) físico(s) generado(s).'
+            '" porque su estado actual es "' || :OLD.estado || '" (solo se permite en PENDIENTE).'
         );
     END IF;
 END TRG_Compra_Modificacion_Sin_Ejemplares;
 /
 
--- DISP-15: Impide eliminar una compra cuando ya existen
--- ejemplares físicos generados a partir de ella.
+-- DISP-15: Impide eliminar una Compra si no está en estado PENDIENTE
+-- La restricción correcta es: solo se puede eliminar una compra en estado PENDIENTE.
 CREATE OR REPLACE TRIGGER TRG_Compra_Baja_Sin_Ejemplares
 BEFORE DELETE ON Compra
 FOR EACH ROW
-DECLARE
-    v_count NUMBER;
 BEGIN
-    SELECT COUNT(*)
-    INTO v_count
-    FROM Ejemplar
-    WHERE idCompra = :OLD.id;
-
-    IF v_count > 0 THEN
+    IF :OLD.estado != 'PENDIENTE' THEN
         RAISE_APPLICATION_ERROR(
             -20061,
             'No se puede eliminar la compra "' || :OLD.id ||
-            '" porque posee ' || v_count ||
-            ' ejemplar(es) físico(s) generado(s).'
+            '" porque su estado actual es "' || :OLD.estado || '" (solo se permite en PENDIENTE).'
         );
     END IF;
 END TRG_Compra_Baja_Sin_Ejemplares;

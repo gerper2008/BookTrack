@@ -112,7 +112,7 @@ LEFT JOIN Libro l ON l.id = ed.idLibro;
 -- Ejemplo de uso:
 SELECT *
 FROM VW_Ejemplares_Disponibles
-WHERE e.disponibilidad = TRUE
+WHERE disponibilidad = 1
 AND localizacion = 'Sala A'
 ORDER BY titulo_libro, codigoEjemplar;
 
