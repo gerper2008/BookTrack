@@ -48,7 +48,7 @@ CREATE TABLE Ejemplar (
     id VARCHAR2(10),
     idEdicion VARCHAR2(10),
     estadoFisico VARCHAR2(30),
-    disponibilidad BOOLEAN,
+    disponibilidad NUMBER(1),
     localizacion VARCHAR2(40),
     fechaAdquisicion DATE
 );

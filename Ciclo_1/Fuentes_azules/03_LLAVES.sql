@@ -25,15 +25,16 @@ ALTER TABLE Categoria ADD UNIQUE(nombre);
 ALTER TABLE Autor ADD CONSTRAINT UQ_Autor_Nombre_Apellidos UNIQUE (nombre, apellidos);
 
 ---------------------------------------------------------------------------------------------
---- PERSISTENCIA: FORANEAS -> Definición de claves foraneas
+--- PERSISTENCIA: FORANEAS -> Definición lógica de relaciones
+--- (Documentación, no ejecutar. Las relaciones reales están en ACCIONES)
 ---------------------------------------------------------------------------------------------
-ALTER TABLE Administrador ADD FOREIGN KEY(idUsuario) REFERENCES Usuario(id);
-ALTER TABLE Libro ADD FOREIGN KEY(idCategoria) REFERENCES Categoria(id);
-ALTER TABLE Edicion ADD FOREIGN KEY(idLibro) REFERENCES Libro(id);
-ALTER TABLE Edicion ADD FOREIGN KEY(idEditorial) REFERENCES Editorial(id);
-ALTER TABLE Ejemplar ADD FOREIGN KEY(idEdicion) REFERENCES Edicion(id);
-ALTER TABLE Compra ADD FOREIGN KEY(idProveedor) REFERENCES Proveedor(id);
-ALTER TABLE Producto_Compra ADD FOREIGN KEY(idCompra) REFERENCES Compra(id);
-ALTER TABLE Producto_Compra ADD FOREIGN KEY(idLibro) REFERENCES Libro(id);
-ALTER TABLE Libro_Autor ADD FOREIGN KEY (idLibro) REFERENCES Libro(id);
-ALTER TABLE Libro_Autor ADD FOREIGN KEY (idAutor) REFERENCES Autor(id);
+-- Administrador.idUsuario → Usuario(id)
+-- Libro.idCategoria → Categoria(id)
+-- Edicion.idLibro → Libro(id)
+-- Edicion.idEditorial → Editorial(id)
+-- Ejemplar.idEdicion → Edicion(id)
+-- Compra.idProveedor → Proveedor(id)
+-- Producto_Compra.idCompra → Compra(id)
+-- Producto_Compra.idLibro → Libro(id)
+-- Libro_Autor.idLibro → Libro(id)
+-- Libro_Autor.idAutor → Autor(id)

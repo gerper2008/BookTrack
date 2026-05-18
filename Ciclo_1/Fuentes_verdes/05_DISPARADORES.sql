@@ -139,26 +139,26 @@ END TRG_Editorial_Generar_Id;
 /
 
 -- DISP-09: No eliminar Editorial si tiene ediciones
-CREATE OR REPLACE TRIGGER TRG_Editorial_Baja_Sin_Ediciones
-BEFORE DELETE ON Editorial
-FOR EACH ROW
-DECLARE
-    v_count NUMBER;
-BEGIN
-    SELECT COUNT(*)
-    INTO v_count
-    FROM Edicion
-    WHERE idEditorial = :OLD.id;
+-- CREATE OR REPLACE TRIGGER TRG_Editorial_Baja_Sin_Ediciones
+-- BEFORE DELETE ON Editorial
+-- FOR EACH ROW
+-- DECLARE
+--     v_count NUMBER;
+-- BEGIN
+--     SELECT COUNT(*)
+--     INTO v_count
+--     FROM Edicion
+--     WHERE idEditorial = :OLD.id;
 
-    IF v_count > 0 THEN
-        RAISE_APPLICATION_ERROR(
-            -20072,
-            'No se puede eliminar la editorial "' || :OLD.nombre ||
-            '" porque tiene ' || v_count || ' edición(es) registrada(s).'
-        );
-    END IF;
-END TRG_Editorial_Baja_Sin_Ediciones;
-/
+--     IF v_count > 0 THEN
+--         RAISE_APPLICATION_ERROR(
+--             -20072,
+--             'No se puede eliminar la editorial "' || :OLD.nombre ||
+--             '" porque tiene ' || v_count || ' edición(es) registrada(s).'
+--         );
+--     END IF;
+-- END TRG_Editorial_Baja_Sin_Ediciones;
+-- /
 
 -- DISP-10: Generar id de Ejemplar → EJM + 3 dígitos
 CREATE OR REPLACE TRIGGER TRG_Ejemplar_Generar_Id
@@ -277,3 +277,21 @@ BEGIN
     END IF;
 END TRG_Proveedor_Baja_Sin_Compras;
 /
+
+DROP TRIGGER TRG_Categoria_Generar_Id;
+DROP TRIGGER TRG_Libro_Generar_Id;
+DROP TRIGGER TRG_Libro_Titulo_Sin_Ediciones;
+DROP TRIGGER TRG_Autor_Generar_Id;
+DROP TRIGGER TRG_Edicion_Generar_Id;
+DROP TRIGGER TRG_Edicion_Origen_Sin_Ejemplares;
+DROP TRIGGER TRG_Edicion_Baja_Sin_Ejemplares;
+DROP TRIGGER TRG_Editorial_Generar_Id;
+DROP TRIGGER TRG_Editorial_Baja_Sin_Ediciones;
+DROP TRIGGER TRG_Ejemplar_Generar_Id;
+DROP TRIGGER TRG_Ejemplar_Disponible;
+DROP TRIGGER TRG_Compra_Generar_Id;
+DROP TRIGGER TRG_Compra_Estado_Inicial;
+DROP TRIGGER TRG_Compra_Modificacion_Sin_Ejemplares;
+DROP TRIGGER TRG_Compra_Baja_Sin_Ejemplares;
+DROP TRIGGER TRG_Proveedor_Generar_Id;
+DROP TRIGGER TRG_Proveedor_Baja_Sin_Compras;

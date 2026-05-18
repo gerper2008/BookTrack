@@ -15,7 +15,7 @@ ALTER TABLE Administrador ADD CONSTRAINT CHECK_Administrador_sede CHECK (REGEXP_
 
 -- Categoria
 ALTER TABLE Categoria ADD CONSTRAINT CHECK_Categoria_nombre CHECK (REGEXP_LIKE(nombre, '^[A-Za-záéíóúÁÉÍÓÚüÜñÑ ]+$'));
-ALTER TABLE Categoria ADD CONSTRAINT CHECK_Categoria_descripcion CHECK (REGEXP_LIKE(descripcion, '^[A-Za-záéíóúÁÉÍÓÚüÜñÑ ]+$'));
+ALTER TABLE Categoria ADD CONSTRAINT CHECK_Categoria_descripcion CHECK (REGEXP_LIKE(descripcion,'^[A-Za-z0-9áéíóúÁÉÍÓÚüÜñÑ ,.-]+$'));
 
 -- Autor
 ALTER TABLE Autor ADD CONSTRAINT CHECK_Autor_nombre CHECK (REGEXP_LIKE(nombre, '^[A-Za-záéíóúÁÉÍÓÚüÜñÑ ]+$'));
@@ -24,15 +24,16 @@ ALTER TABLE Autor ADD CONSTRAINT CHECK_Autor_genero CHECK (genero IN ('Masculino
 ALTER TABLE Autor ADD CONSTRAINT CHECK_Autor_nacionalidad CHECK (REGEXP_LIKE(nacionalidad, '^[A-Za-záéíóúÁÉÍÓÚüÜñÑ ]+$'));
 
 -- Libro
-ALTER TABLE Libro ADD CONSTRAINT CHECK_Libro_titulo CHECK (REGEXP_LIKE(titulo, '^[A-Za-záéíóúÁÉÍÓÚüÜñÑ ]+$'));
+ALTER TABLE Libro ADD CONSTRAINT CHECK_Libro_titulo CHECK (REGEXP_LIKE(titulo, '^[A-Za-z0-9áéíóúÁÉÍÓÚüÜñÑ #.-]+$'));
 ALTER TABLE Libro ADD CONSTRAINT CHECK_Libro_idioma CHECK (REGEXP_LIKE(idioma, '^[A-Za-záéíóúÁÉÍÓÚüÜñÑ ]+$'));
 ALTER TABLE Libro ADD CONSTRAINT CHECK_Libro_descripcion CHECK (REGEXP_LIKE(descripcion, '^[A-Za-záéíóúÁÉÍÓÚüÜñÑ ]+$'));
 ALTER TABLE Libro ADD CONSTRAINT CHECK_Libro_fecha_publicacion CHECK (fecha_publicacion <= TO_DATE('31/12/2025', 'DD/MM/YYYY'));
 
 -- Ejemplar
-ALTER TABLE Ejemplar ADD CONSTRAINT CHECK_Ejemplar_localizacion CHECK (REGEXP_LIKE(localizacion, '^[A-Za-záéíóúÁÉÍÓÚüÜñÑ ]+$'));
+ALTER TABLE Ejemplar ADD CONSTRAINT CHECK_Ejemplar_localizacion CHECK (REGEXP_LIKE(localizacion, '^[A-Za-z0-9áéíóúÁÉÍÓÚüÜñÑ -]+$'));
 ALTER TABLE Ejemplar ADD CONSTRAINT CHECK_Ejemplar_fechaAdquisicion CHECK (fechaAdquisicion <= TO_DATE('31/12/2025', 'DD/MM/YYYY'));
 ALTER TABLE Ejemplar ADD CONSTRAINT CHECK_Ejemplar_estadoFisico CHECK (estadoFisico IN ('Desgastado', 'Bueno', 'Dañado', 'Restaurado', 'Perdido', 'Nuevo'));
+ALTER TABLE Ejemplar ADD CONSTRAINT CHECK_Ejemplar_disponibilidad CHECK (disponibilidad IN (0,1));
 
 -- Edicion
 ALTER TABLE Edicion ADD CONSTRAINT CHECK_Edicion_anio CHECK (anio <= TO_DATE('31/12/2025', 'DD/MM/YYYY'));

@@ -19,16 +19,8 @@ ALTER TABLE Edicion ADD CONSTRAINT FK_Edicion_Editorial
 
 -- Ejemplar.idEdicion → Edicion(id) - ON DELETE CASCADE
 -- Si se elimina la edición, todos sus ejemplares asociados se eliminan en cascada
---ALTER TABLE Ejemplar ADD CONSTRAINT FK_Ejemplar_Edicion
-    --FOREIGN KEY (idEdicion) REFERENCES Edicion(id) ON DELETE CASCADE;
-    
-ALTER TABLE Ejemplar
-ADD CONSTRAINT FK_Ejemplar_Edicion
-FOREIGN KEY (idEdicion)
-REFERENCES Edicion(id);
-    
---ALTER TABLE Ejemplar
---DROP CONSTRAINT FK_Ejemplar_Edicion;
+ALTER TABLE Ejemplar ADD CONSTRAINT FK_Ejemplar_Edicion
+    FOREIGN KEY (idEdicion) REFERENCES Edicion(id) ON DELETE CASCADE;
     
 -- Libro_Autor.idAutor → Autor(id) - ON DELETE CASCADE
 -- SET NULL en columnas PK. Se usa CASCADE: si se elimina un autor, sus
