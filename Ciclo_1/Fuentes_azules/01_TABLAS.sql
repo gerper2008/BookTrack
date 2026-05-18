@@ -46,6 +46,7 @@ CREATE TABLE Libro_Autor (
 
 CREATE TABLE Ejemplar (
     id VARCHAR2(10),
+    idEdicion VARCHAR2(10),
     estadoFisico VARCHAR2(30),
     disponibilidad BOOLEAN,
     localizacion VARCHAR2(40),
@@ -55,6 +56,8 @@ CREATE TABLE Ejemplar (
 
 CREATE TABLE Edicion (
     id VARCHAR2(10),
+    idLibro VARCHAR2(10),
+    idEditorial VARCHAR2(10),
     anio DATE,
     paginas NUMBER(3),
     idLibro VARCHAR2(10),
