@@ -11,10 +11,10 @@ INSERT INTO Compra VALUES ('CMP005', TO_DATE('2024-08-10','YYYY-MM-DD'), 50000.0
 INSERT INTO Compra VALUES ('CMP006', TO_DATE('2024-09-05','YYYY-MM-DD'), 0.01, 'RECHAZADO', 'PRV003');
  
 -- TUP2 OK: cantidad > 0 y precioUnidad > 0 juntos
-INSERT INTO Producto_Compra VALUES ('PC004', 4, 55000.00, 'COM004', 'LIB001');
-INSERT INTO Producto_Compra VALUES ('PC005', 1, 48000.00, 'COM005', 'LIB002');
+INSERT INTO Producto_Compra VALUES ('PC004', 4, 55000.00, 'CMP004', 'LIB001');
+INSERT INTO Producto_Compra VALUES ('PC005', 1, 48000.00, 'CMP001', 'LIB002');
 COMMIT;
- 
+
 -- TUP3 OK: disponibilidad = 1 con estadoFisico = 'Nuevo' (combinacion permitida)
 INSERT INTO Ejemplar VALUES ('EJE004', 'Nuevo', 1, 'Estante C dos',  TO_DATE('2024-01-15','YYYY-MM-DD'), 'EDI001');
  
@@ -31,7 +31,8 @@ INSERT INTO Libro VALUES ('LIB004', 'El Amor en los Tiempos del Colera', TO_DATE
 INSERT INTO Autor VALUES ('AUT004', 'Mario', 'Vargas Llosa', 'Masculino', 'Peruana');
  
 COMMIT;
- 
+SELECT * FROM categoria;
+
 ---------------------------------------------------------------------------------------------
 -- DISPARADORES OK
 ---------------------------------------------------------------------------------------------
@@ -105,43 +106,154 @@ COMMIT;
 DELETE FROM Usuario WHERE id = 'USR004';
 COMMIT;
 
----------------------------------------------------------------------------------------------
---- PRUEBAS: DisparadoresNoOK -> Intentos bloqueados por disparadores
----------------------------------------------------------------------------------------------
+-- ============================================================
+--  BOOKTRACK -- CASOS NO OK (errores esperados)
+--  Disparadores, Acciones Referenciales y Tuplas
+-- ============================================================
 
--- DISP-1-NOK: Edicion con año ANTERIOR a la fecha de publicacion del libro  ✗
-INSERT INTO Edicion VALUES ('EDI099', TO_DATE('1950-01-01','YYYY-MM-DD'), 200, 'LIB001', 'ED001');
--- LIB001 publicado en 1967, edicion en 1950 → ORA-20001
+-- ============================================================
+-- SECCIÓN 1: DISPARADORES
+-- ============================================================
 
--- DISP-1-NOK: Edicion con año muy anterior  ✗
-INSERT INTO Edicion VALUES ('EDI098', TO_DATE('1900-01-01','YYYY-MM-DD'), 150, 'LIB002', 'ED002');
--- LIB002 publicado en 1944, edicion en 1900 → ORA-20001
+-- DISP-02: Nombre de Categoria duplicado
+-- Error esperado: ORA-20042 - Ya existe una categoría con el nombre...
+EXEC PC_CATEGORIA.AD_CATEGORIA('Ficcion', 'Libros de fantasia');
 
--- DISP-3-NOK: Intentar eliminar un Ejemplar disponible (disponibilidad = TRUE)  ✗
-UPDATE Ejemplar SET disponibilidad = TRUE WHERE id = 'EJE001';
-DELETE FROM Ejemplar WHERE id = 'EJE001';
--- → ORA-20002: No se puede eliminar el ejemplar EJE001 porque está en circulacion activa.
+-- DISP-03: Eliminar Categoria con Libros asociados
+-- Error esperado: ORA-20040 - No se puede eliminar la categoria porque tiene libros
+EXEC PC_CATEGORIA.ELI_CATEGORIA('CAT001');
 
--- DISP-4-NOK: Insertar como sesión de un Bibliotecario → denegado  ✗
--- (Sesión Oracle es 'biblio@biblioteca.com', USR002 con rol 'Bibliotecario')
--- CONNECT biblio@biblioteca.com/...;
-INSERT INTO Compra    VALUES ('CERR9', TO_DATE('2024-10-05','YYYY-MM-DD'), 50000.00, 'PENDIENTE', 'PRV001');
--- → ORA-20010: Acceso denegado: solo un Administrador puede registrar Compras.
+-- DISP-05: Insertar Libro con Categoria inexistente
+-- Error esperado: ORA-20041 - La categoría "CAT999" no existe en el catálogo
+EXEC PC_LIBRO.AD_LIBRO('CAT999', 'Libro Fantasma', 'Descripcion', TO_DATE('2020-01-01','YYYY-MM-DD'), 'Espanol');
 
-INSERT INTO Libro     VALUES ('LERR9', 'Libro No Autorizado', TO_DATE('2020-01-01','YYYY-MM-DD'), 'Espanol', 'Sin permiso', 'CAT001');
--- → ORA-20010: Acceso denegado: solo un Administrador puede registrar Libros.
+-- DISP-06: Modificar titulo de Libro que tiene Ediciones activas
+-- Error esperado: ORA-20020 - No se puede modificar el título porque tiene ediciones activas
+EXEC PC_LIBRO.MOD_LIBRO('LIB001', 'CAT001', 'Titulo Cambiado', 'Descripcion', 'Espanol');
 
-INSERT INTO Autor     VALUES ('AERR9', 'No', 'Autorizado', 'Masculino', 'Colombiana');
--- → ORA-20010: Acceso denegado: solo un Administrador puede registrar Autores.
+-- DISP-07: Eliminar Libro que tiene Ediciones
+-- Error esperado: ORA-20021 - No se puede eliminar el libro porque posee ediciones
+EXEC PC_LIBRO.ELI_LIBRO('LIB001');
 
-INSERT INTO Proveedor VALUES ('PERR9', 'no@autorizado.com', 'Sin', 'Permiso Gil', 'Empresa X', '3000000099');
--- → ORA-20010: Acceso denegado: solo un Administrador puede registrar Proveedores.
+-- DISP-09: Autor con nombre + apellidos duplicados
+-- Error esperado: ORA-20050 - Ya existe un autor con el nombre "Gabriel Garcia Marquez"
+EXEC PC_AUTOR.AD_AUTOR('Gabriel', 'Garcia Marquez', 'Masculino', 'Colombiana');
 
--- DISP-4-NOK: Insertar como sesión de un Lector → denegado  ✗
--- CONNECT lector@gmail.com/...;
-INSERT INTO Categoria VALUES ('KERR9', 'Sin Permiso', 'Categoria no autorizada');
--- → ORA-20010: Acceso denegado: solo un Administrador puede registrar Categorias.
+-- DISP-11: Eliminar Autor con libros vinculados
+-- Error esperado: ORA-20052 - No se puede eliminar el autor porque tiene libros asociados
+EXEC PC_AUTOR.ELI_AUTOR('AUT001');
 
--- DISP-5-NOK: Actualizar correo de Proveedor a uno que ya existe en Editorial  ✗
-UPDATE Proveedor SET correo = 'contacto@planeta.com' WHERE id = 'PRV002';
--- 'contacto@planeta.com' ya es correo de ED001 → ORA-20003
+-- DISP-13: Insertar Edicion con Libro inexistente
+-- Error esperado: ORA-20060 - El libro con id "LIB999" no existe en el catálogo
+EXEC PC_EDICION.AD_EDICION('LIB999', 'ED001', TO_DATE('2020-01-01','YYYY-MM-DD'), 300);
+
+-- DISP-14: Insertar Edicion con Editorial inexistente
+-- Error esperado: ORA-20061 - La editorial con id "EDT999" no existe en el sistema
+EXEC PC_EDICION.AD_EDICION('LIB001', 'EDT999', TO_DATE('2020-01-01','YYYY-MM-DD'), 300);
+
+-- DISP-15: Modificar idLibro de Edicion que tiene Ejemplares
+-- Error esperado: ORA-20062 - No se puede cambiar el origen de la edición porque posee ejemplares
+EXEC PC_EDICION.MOD_EDICION('EDI001', 'LIB002', 'ED001', TO_DATE('2000-01-01','YYYY-MM-DD'), 432);
+
+-- DISP-16: Eliminar Edicion que tiene Ejemplares
+-- Error esperado: ORA-20063 - No se puede eliminar la edicion porque posee ejemplares
+EXEC PC_EDICION.ELI_EDICION('EDI001');
+
+-- DISP-18: Correo de Editorial duplicado
+-- Error esperado: ORA-20070 - Ya existe una editorial con el correo...
+EXEC PC_EDITORIAL.AD_EDITORIAL('Nueva Editorial', 'contacto@planeta.com', '3999999999', 'Colombia');
+
+-- DISP-19: Teléfono de Editorial duplicado
+-- Error esperado: ORA-20071 - Ya existe una editorial con el teléfono...
+EXEC PC_EDITORIAL.AD_EDITORIAL('Otra Editorial', 'nueva@otra.com', '3001234567', 'Colombia');
+
+-- DISP-20: Eliminar Editorial con Ediciones activas
+-- Error esperado: ORA-20072 - No se puede eliminar la editorial porque tiene ediciones
+EXEC PC_EDITORIAL.ELI_EDITORIAL('ED001');
+
+-- DISP-23: Insertar Compra con Proveedor inexistente
+-- Error esperado: ORA-20090 - El proveedor con id "PRV999" no existe en el sistema
+EXEC PC_COMPRA.AD_COMPRA('PRV999', TO_DATE('2025-01-01','YYYY-MM-DD'), 100000, 'PENDIENTE');
+
+-- DISP-24: Estado inicial de Compra forzado a PENDIENTE
+-- (aunque se pase COMPLETADO, el trigger lo sobreescribe a PENDIENTE)
+-- Verificar con: SELECT estado FROM Compra ORDER BY id DESC;
+EXEC PC_COMPRA.AD_COMPRA('PRV001', TO_DATE('2025-04-01','YYYY-MM-DD'), 50000, 'COMPLETADO');
+
+-- DISP-25: Modificar Compra que NO está en estado PENDIENTE
+-- Error esperado: ORA-20091 - No se puede modificar la compra porque su estado no es PENDIENTE
+-- CMP001 está en estado COMPLETADO
+EXEC PC_COMPRA.MOD_COMPRA('CMP001', TO_DATE('2024-02-01','YYYY-MM-DD'), 999999, 'COMPLETADO');
+
+-- DISP-28: Correo de Proveedor duplicado
+-- Error esperado: ORA-20100 - Ya existe un proveedor con el correo...
+EXEC PC_PROVEEDOR.AD_PROVEEDOR('Juan', 'Perez', 'ventas@distribuidora.com', 'Empresa Nueva', '3111111111');
+
+-- DISP-29: Eliminar Proveedor con Compras registradas
+-- Error esperado: ORA-20101 - No se puede eliminar el proveedor porque tiene compras
+EXEC PC_PROVEEDOR.ELI_PROVEEDOR('PRV001');
+
+-- ============================================================
+-- SECCIÓN 2: ACCIONES REFERENCIALES
+-- ============================================================
+
+-- ON DELETE SET NULL: Eliminar Categoria deja idCategoria=NULL en Libro
+-- (requiere que el libro NO tenga ediciones para que DISP-03 lo permita)
+-- Primero verificar con un libro sin ediciones; si no hay, crear uno:
+EXEC PC_LIBRO.AD_LIBRO('CAT005', 'Libro Sin Edicion', 'Libro temporal sin edicion', TO_DATE('2020-01-01','YYYY-MM-DD'), 'Espanol');
+-- Luego intentar eliminar CAT005 (Filosofia) — fallará por DISP-03 si tiene libros
+-- Este caso muestra el conflicto entre el trigger y la acción referencial:
+EXEC PC_CATEGORIA.ELI_CATEGORIA('CAT005');
+
+-- ON DELETE CASCADE: Eliminar Edicion elimina sus Ejemplares
+-- (requiere que DISP-16 no lo bloquee → usar edicion sin ejemplares)
+EXEC PC_EDICION.AD_EDICION('LIB005', 'EDT005', TO_DATE('2020-06-01','YYYY-MM-DD'), 250);
+-- Verificar ID generado y luego eliminar:
+-- EXEC PC_EDICION.ELI_EDICION('EDI00X'); → eliminará ejemplares en cascada
+
+-- ON DELETE CASCADE: Eliminar Usuario elimina su Administrador
+-- Error esperado: ninguno — se elimina en cascada (caso de verificación)
+-- Primero insertar usuario y admin de prueba:
+EXEC PC_USUARIO.AD_USUARIO('cascada@test.com', 'Administrador', 'Test', 'Cascada', '3111222333');
+-- Verificar ID y registrar como admin:
+-- EXEC PC_USUARIO.AD_ADMINISTRADOR('USR00X', 'Operativo', 'Sede Test');
+-- Al eliminar el usuario, el administrador se borra en cascada:
+-- EXEC PC_USUARIO.ELI_USUARIO('USR00X');
+
+-- ============================================================
+-- SECCIÓN 3: RESTRICCIONES DE TUPLAS
+-- ============================================================
+
+-- TUP1: Compra COMPLETADA con total = 0
+-- Error esperado: ORA-02290 - restricción de control CH_Compra_estado_total violada
+-- (el trigger DISP-24 fuerza estado=PENDIENTE en INSERT,
+--  así que se prueba haciendo UPDATE a COMPLETADO con total=0)
+UPDATE Compra SET estado = 'COMPLETADO', total = 0 WHERE id = 'COM007';
+COMMIT;
+
+-- TUP2: Producto_Compra con cantidad = 0
+-- Error esperado: ORA-02290 - restricción CH_ProductoCompra_importe violada
+EXEC PC_COMPRA.AD_PRODUCTO_COMPRA('COM007', 'LIB001', 0, 50000);
+
+-- TUP2: Producto_Compra con precioUnidad negativo
+-- Error esperado: ORA-02290 - restricción CH_ProductoCompra_importe violada
+EXEC PC_COMPRA.AD_PRODUCTO_COMPRA('COM007', 'LIB001', 3, -1000);
+
+-- TUP3: Ejemplar no disponible ('0') con estadoFisico 'Nuevo'
+-- Error esperado: ORA-02290 - restricción CH_Ejemplar_nuevo_disponible violada
+EXEC PC_EJEMPLAR.AD_EJEMPLAR('EDI001', 'Nuevo', '0', 'Estante A uno', TO_DATE('2024-01-01','YYYY-MM-DD'));
+
+-- TUP5: Libro con titulo NULL
+-- Error esperado: ORA-02290 - restricción CH_Libro_titulo_idioma violada
+INSERT INTO Libro(id, idCategoria, titulo, descripcion, fecha_publicacion, idioma)
+VALUES ('LIBX', 'CAT001', NULL, 'Sin titulo', TO_DATE('2020-01-01','YYYY-MM-DD'), 'Espanol');
+
+-- TUP5: Libro con idioma NULL
+-- Error esperado: ORA-02290 - restricción CH_Libro_titulo_idioma violada
+INSERT INTO Libro(id, idCategoria, titulo, descripcion, fecha_publicacion, idioma)
+VALUES ('LIBY', 'CAT001', 'Titulo sin idioma', 'Descripcion', TO_DATE('2020-01-01','YYYY-MM-DD'), NULL);
+
+-- TUP6: Autor con nacionalidad NULL
+-- Error esperado: ORA-02290 - restricción CH_Autor_identidad violada
+INSERT INTO Autor(id, nombre, apellidos, genero, nacionalidad)
+VALUES ('AUTX', 'Sin', 'Nacionalidad', 'Masculino', NULL);

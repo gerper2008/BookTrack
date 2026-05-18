@@ -92,14 +92,6 @@ END PC_USUARIO;
 /
 
 
--- ============================================================
--- VERIFICAR
--- ============================================================
-SELECT object_name, object_type, status
-FROM user_objects
-WHERE object_type IN ('PACKAGE', 'PACKAGE BODY')
-  AND object_name LIKE 'PC_%'
-ORDER BY object_name;
 
 -- ============================================================
 --  BOOKTRACK -- SECUENCIAS

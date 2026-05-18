@@ -79,35 +79,4 @@ BEGIN PC_USUARIO.AD_ADMINISTRADOR('USRXXX', 'FULL_ACCESS', 'Sede Sur'); END;
 BEGIN PC_CATEGORIA.ELI_CATEGORIA('CAT001'); END;
 /
 
--- ============================================================
--- LIMPIEZA DE DATOS - BOOKTRACK CICLO 1
--- (Respetar orden por FK: hijos primero, padres al final)
--- ============================================================
 
--- 1. Tablas hijas sin dependientes
-DELETE FROM Libro_Autor;
-DELETE FROM Producto_Compra;
-
--- 2. Ejemplar (depende de Edicion)
-DELETE FROM Ejemplar;
-
--- 3. Edicion (depende de Libro y Editorial)
-DELETE FROM Edicion;
-
--- 4. Compra (depende de Proveedor)
-DELETE FROM Compra;
-
--- 5. Libro (depende de Categoria)
-DELETE FROM Libro;
-
--- 6. Administrador (depende de Usuario)
-DELETE FROM Administrador;
-
--- 7. Tablas raiz
-DELETE FROM Categoria;
-DELETE FROM Autor;
-DELETE FROM Editorial;
-DELETE FROM Proveedor;
-DELETE FROM Usuario;
-
-COMMIT;
