@@ -91,8 +91,6 @@ CREATE OR REPLACE PACKAGE PC_USUARIO IS
 END PC_USUARIO;
 /
 
-
-
 -- ============================================================
 --  BOOKTRACK -- SECUENCIAS
 --  Crear ANTES de compilar los Package Bodies

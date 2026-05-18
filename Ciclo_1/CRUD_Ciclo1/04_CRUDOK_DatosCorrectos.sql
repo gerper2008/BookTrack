@@ -111,8 +111,17 @@ BEGIN PC_COMPRA.AD_PRODUCTO_COMPRA('COM011', 'LIB007', 5, 45000); END;
 -- ============================================================
 
 
-BEGIN PC_USUARIO.AD_USUARIO('zz1@booktrack.com', 'Administrador', 'Carlos',  'Mendez Rios',  '3600001111'); END;
+BEGIN
+    PC_USUARIO.AD_USUARIO(
+        'quantum.nebula999@booktrack.com',
+        'Lector',
+        'Orion',
+        'Valencrest',
+        '3998887771'
+    );
+END;
 /
+
 BEGIN PC_USUARIO.AD_USUARIO('zz2@booktrack.com', 'Bibliotecario', 'Marcela', 'Suarez Lopez', '3600002222'); END;
 /
 BEGIN PC_USUARIO.AD_USUARIO('zz3@booktrack.com', 'Lector',        'Andres',  'Florez Pinto', '3600003333'); END;

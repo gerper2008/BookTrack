@@ -415,15 +415,38 @@ END PC_COMPRA;
 -- PC_USUARIO
 -- -----------------------------------------------
 CREATE OR REPLACE PACKAGE BODY PC_USUARIO IS
-
-    PROCEDURE AD_USUARIO(xCORREO IN VARCHAR2, xROL IN VARCHAR2, xNOMBRE IN VARCHAR2, xAPELLIDOS IN VARCHAR2, xTELEFONO IN VARCHAR2) IS
+    PROCEDURE AD_USUARIO(
+        xCORREO IN VARCHAR2,
+        xROL IN VARCHAR2,
+        xNOMBRE IN VARCHAR2,
+        xAPELLIDOS IN VARCHAR2,
+        xTELEFONO IN VARCHAR2
+    ) IS
     BEGIN
-        INSERT INTO Usuario(id, correo, rol, nombre, apellidos, telefono)
-        VALUES ('USR' || LPAD(SQ_USUARIO.NEXTVAL, 3, '0'), xCORREO, xROL, xNOMBRE, xAPELLIDOS, xTELEFONO);
+        INSERT INTO Usuario(
+            correo,
+            rol,
+            nombre,
+            apellidos,
+            telefono
+        )
+        VALUES (
+            xCORREO,
+            xROL,
+            xNOMBRE,
+            xAPELLIDOS,
+            xTELEFONO
+        );
+
         COMMIT;
+
     EXCEPTION
-        WHEN OTHERS THEN ROLLBACK;
-            RAISE_APPLICATION_ERROR(-20181, 'Error al insertar Usuario: ' || SQLERRM);
+        WHEN OTHERS THEN
+            ROLLBACK;
+            RAISE_APPLICATION_ERROR(
+                -20181,
+                'Error al insertar Usuario: ' || SQLERRM
+            );
     END AD_USUARIO;
 
     PROCEDURE MOD_USUARIO(xID IN VARCHAR2, xCORREO IN VARCHAR2, xNOMBRE IN VARCHAR2, xAPELLIDOS IN VARCHAR2, xTELEFONO IN VARCHAR2) IS
