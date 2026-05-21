@@ -28,6 +28,9 @@ COMMIT;
 INSERT INTO Categoria (nombre, descripcion)
 VALUES ('Categoria Auto ZV', 'Prueba autogeneracion de categoria');
 
+-- Verificar
+--SELECT * FROM CATEGORIA WHERE nombre='Categoria Auto ZV';
+
 -- DISP-02 OK: Generación automática de idLibro
 INSERT INTO Libro (titulo, fecha_publicacion, idioma, descripcion, idCategoria)
 VALUES (
@@ -35,15 +38,17 @@ VALUES (
     TO_DATE('2015-01-01','YYYY-MM-DD'),
     'Espanol',
     'Prueba autogeneracion de libro',
-    'CATZV60'
+    'CAT052'
 );
 
 COMMIT;
 
+-- Verificar
+--SELECT * FROM LIBRO WHERE titulo='Libro Auto ZV';
+
 -- DISP-03 OK: Modificar título de libro SIN ediciones
-INSERT INTO Libro (id, titulo, fecha_publicacion, idioma, descripcion, idCategoria)
+INSERT INTO Libro (titulo, fecha_publicacion, idioma, descripcion, idCategoria)
 VALUES (
-    'LIBZV61',
     'Libro Editable ZV',
     TO_DATE('2020-01-01','YYYY-MM-DD'),
     'Espanol',
@@ -51,9 +56,15 @@ VALUES (
     'CATZV60'
 );
 
+-- Verificar
+SELECT * FROM LIBRO WHERE titulo='Libro Editable ZV';
+
 UPDATE Libro
 SET titulo = 'Libro Editado ZV'
-WHERE id = 'LIBZV61';
+WHERE descripcion = 'Sin ediciones asociadas';
+
+-- Verificar
+SELECT * FROM LIBRO WHERE titulo='Libro Editado ZV';
 
 COMMIT;
 
@@ -63,23 +74,25 @@ VALUES ('Autor', 'AutoZV', 'Masculino', 'Colombiana');
 
 COMMIT;
 
+-- Verificar
+SELECT * FROM Autor WHERE nombre='Autor';
+
 -- DISP-05 OK: Generación automática de idEdicion
-INSERT INTO Libro (id, titulo, fecha_publicacion, idioma, descripcion, idCategoria)
+INSERT INTO Libro (titulo, fecha_publicacion, idioma, descripcion, idCategoria)
 VALUES (
-    'LIBZV62',
     'Libro para Edicion Auto',
     TO_DATE('2018-01-01','YYYY-MM-DD'),
     'Espanol',
     'Base para edicion auto',
-    'CATZV60'
+    'CAT052'
 );
 
 INSERT INTO Edicion (anio, paginas, idLibro, idEditorial)
 VALUES (
     TO_DATE('2022-01-01','YYYY-MM-DD'),
     300,
-    'LIBZV62',
-    'EDTZV60'
+    'LIB001',
+    'EDT001'
 );
 
 COMMIT;
@@ -136,8 +149,11 @@ VALUES (
     'Chile'
 );
 
+-- Ver ultimo id de editorial
+-- SELECT * FROM EDITORIAL ORDER BY ID desc;
+
 DELETE FROM Editorial
-WHERE id = 'EDTZV69';
+WHERE id = 'EDT054';
 
 COMMIT;
 
@@ -153,7 +169,7 @@ VALUES (
 
 INSERT INTO Ejemplar (idEdicion, estadoFisico, disponibilidad, localizacion, fechaAdquisicion)
 VALUES (
-    'EDIZV70',
+    'EDI001',
     'Bueno',
     0,
     'Bodega ZV 70',
@@ -163,18 +179,20 @@ VALUES (
 COMMIT;
 
 -- DISP-11 OK: Eliminar ejemplar NO disponible
-INSERT INTO Ejemplar (id, idEdicion, estadoFisico, disponibilidad, localizacion, fechaAdquisicion)
+INSERT INTO Ejemplar (idEdicion, estadoFisico, disponibilidad, localizacion, fechaAdquisicion)
 VALUES (
-    'EJMZV71',
-    'EDIZV70',
+    'EDI001',
     'Bueno',
     0,
     'Bodega ZV 71',
     TO_DATE('2024-01-01','YYYY-MM-DD')
 );
 
+-- Ver ultimo id de ejemplar
+-- SELECT * FROM Ejemplar ORDER BY ID desc;
+
 DELETE FROM Ejemplar
-WHERE id = 'EJMZV71';
+WHERE id = 'EJM053';
 
 COMMIT;
 
@@ -184,10 +202,16 @@ VALUES (
     TO_DATE('2025-01-01','YYYY-MM-DD'),
     100000,
     'COMPLETADO',
-    'PRVZV60'
+    'PRV001'
 );
 
 COMMIT;
+
+-- Ver ultimo id de compra generado
+-- SELECT * FROM COMPRA ORDER BY ID desc;
+
+-- Buscar compra
+-- SELECT * FROM COMPRA WHERE id='COM051';
 
 -- DISP-13 OK: Estado inicial forzado a PENDIENTE
 INSERT INTO Compra (id, fecha, total, estado, idProveedor)
@@ -199,8 +223,11 @@ VALUES (
     'PRVZV60'
 );
 
+-- Ver ultimo id de compra generado
+SELECT * FROM COMPRA ORDER BY ID desc;
+
 -- Verificar:
--- SELECT estado FROM Compra WHERE id = 'COMZV73';
+SELECT estado FROM Compra WHERE id = 'COM052';
 -- Esperado: PENDIENTE
 
 COMMIT;
@@ -246,7 +273,7 @@ VALUES (
     '3216000099'
 );
 
-COMMIT;
+COMMIT;     
 
 -- DISP-17 OK: Eliminar proveedor SIN compras
 INSERT INTO Proveedor (id, nombre, apellidos, correo, empresa, telefono)
@@ -269,15 +296,16 @@ COMMIT;
 ---------------------------------------------------------------------------------------------
 
 -- DISP-03 NO OK: No modificar título de libro con ediciones
-INSERT INTO Libro (id, titulo, fecha_publicacion, idioma, descripcion, idCategoria)
+INSERT INTO Libro (titulo, fecha_publicacion, idioma, descripcion, idCategoria)
 VALUES (
-    'LIBZV80',
     'Libro con Edicion',
     TO_DATE('2020-01-01','YYYY-MM-DD'),
     'Espanol',
     'No debe dejar cambiar titulo',
     'CATZV60'
 );
+
+-- SELECT idLibro FROM EDICION;
 
 INSERT INTO Edicion (id, idLibro, idEditorial, anio, paginas)
 VALUES (

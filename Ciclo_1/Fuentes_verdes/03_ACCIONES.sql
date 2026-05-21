@@ -52,3 +52,17 @@ ALTER TABLE Producto_Compra ADD CONSTRAINT FK_ProductoCompra_Libro
 -- Si se elimina el usuario, su registro de administrador se elimina en cascada
 ALTER TABLE Administrador ADD CONSTRAINT FK_Administrador_Usuario
     FOREIGN KEY (idUsuario) REFERENCES Usuario(id) ON DELETE CASCADE;
+    
+---------------------------------------------------------------------------------------------
+--- Elminar Acciones
+---------------------------------------------------------------------------------------------
+ALTER TABLE Libro DROP CONSTRAINT FK_Libro_Categoria;
+ALTER TABLE Edicion DROP CONSTRAINT FK_Edicion_Libro;
+ALTER TABLE Edicion DROP CONSTRAINT FK_Edicion_Editorial;
+ALTER TABLE Ejemplar DROP CONSTRAINT FK_Ejemplar_Edicion;
+ALTER TABLE Libro_Autor DROP CONSTRAINT FK_LibroAutor_Autor;
+ALTER TABLE Libro_Autor DROP CONSTRAINT FK_LibroAutor_Libro;
+ALTER TABLE Compra DROP CONSTRAINT FK_Compra_Proveedor;
+ALTER TABLE Producto_Compra DROP CONSTRAINT FK_ProductoCompra_Compra;
+ALTER TABLE Producto_Compra DROP CONSTRAINT FK_ProductoCompra_Libro;
+ALTER TABLE Administrador DROP CONSTRAINT FK_Administrador_Usuario;

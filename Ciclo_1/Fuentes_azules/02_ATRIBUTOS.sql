@@ -8,51 +8,105 @@ ALTER TABLE Usuario ADD CONSTRAINT CHECK_Usuario_apellidos CHECK (REGEXP_LIKE(ap
 ALTER TABLE Usuario ADD CONSTRAINT CHECK_Usuario_correo CHECK (REGEXP_LIKE(correo, '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'));
 ALTER TABLE Usuario ADD CONSTRAINT CHECK_Usuario_telefono CHECK (REGEXP_LIKE(telefono, '^[0-9]{10}$'));
 ALTER TABLE Usuario ADD CONSTRAINT CHECK_Usuario_rol CHECK (rol IN ('Administrador', 'Lector', 'Bibliotecario'));
+ALTER TABLE Usuario
+MODIFY(
+    rol NOT NULL,
+    correo NOT NULL,
+    nombre NOT NULL,
+    apellidos NOT NULL
+);
 
 -- Administrador
 ALTER TABLE Administrador ADD CONSTRAINT CHECK_Administrador_permisos CHECK (permisos IN ('Solo Lectura', 'Operativo', 'Total'));
 ALTER TABLE Administrador ADD CONSTRAINT CHECK_Administrador_sede CHECK (REGEXP_LIKE(sede, '^[A-Za-z0-9áéíóúÁÉÍÓÚüÜñÑ #.-]+$'));
+ALTER TABLE Administrador
+MODIFY(
+    permisos NOT NULL
+);
 
 -- Categoria
 ALTER TABLE Categoria ADD CONSTRAINT CHECK_Categoria_nombre CHECK (REGEXP_LIKE(nombre, '^[A-Za-z0-9áéíóúÁÉÍÓÚüÜñÑ #.-]+$'));
 ALTER TABLE Categoria ADD CONSTRAINT CHECK_Categoria_descripcion CHECK (REGEXP_LIKE(descripcion,'^[A-Za-z0-9áéíóúÁÉÍÓÚüÜñÑ ,.-]+$'));
+ALTER TABLE Categoria
+MODIFY (nombre NOT NULL);
 
 -- Autor
 ALTER TABLE Autor ADD CONSTRAINT CHECK_Autor_nombre CHECK (REGEXP_LIKE(nombre, '^[A-Za-z0-9áéíóúÁÉÍÓÚüÜñÑ #.-]+$'));
 ALTER TABLE Autor ADD CONSTRAINT CHECK_Autor_apellidos CHECK (REGEXP_LIKE(apellidos, '^[A-Za-z0-9áéíóúÁÉÍÓÚüÜñÑ #.-]+$'));
 ALTER TABLE Autor ADD CONSTRAINT CHECK_Autor_genero CHECK (genero IN ('Masculino', 'Femenino', 'Otro'));
 ALTER TABLE Autor ADD CONSTRAINT CHECK_Autor_nacionalidad CHECK (REGEXP_LIKE(nacionalidad, '^[A-Za-z0-9áéíóúÁÉÍÓÚüÜñÑ #.-]+$'));
+ALTER TABLE Autor
+MODIFY(
+    nombre NOT NULL,
+    apellidos NOT NULL,
+    genero NOT NULL
+);
 
 -- Libro
 ALTER TABLE Libro ADD CONSTRAINT CHECK_Libro_titulo CHECK (REGEXP_LIKE(titulo, '^[A-Za-z0-9áéíóúÁÉÍÓÚüÜñÑ #.-]+$'));
 ALTER TABLE Libro ADD CONSTRAINT CHECK_Libro_idioma CHECK (REGEXP_LIKE(idioma, '^[A-Za-z0-9áéíóúÁÉÍÓÚüÜñÑ #.-]+$'));
 ALTER TABLE Libro ADD CONSTRAINT CHECK_Libro_descripcion CHECK (REGEXP_LIKE(descripcion, '^[A-Za-z0-9áéíóúÁÉÍÓÚüÜñÑ #.-]+$'));
 ALTER TABLE Libro ADD CONSTRAINT CHECK_Libro_fecha_publicacion CHECK (fecha_publicacion <= TO_DATE('31/12/2025', 'DD/MM/YYYY'));
+ALTER TABLE Libro
+MODIFY(
+    titulo NOT NULL,
+    fecha_publicacion NOT NULL,
+    idioma NOT NULL
+);
 
 -- Ejemplar
 ALTER TABLE Ejemplar ADD CONSTRAINT CHECK_Ejemplar_localizacion CHECK (REGEXP_LIKE(localizacion, '^[A-Za-z0-9áéíóúÁÉÍÓÚüÜñÑ -]+$'));
 ALTER TABLE Ejemplar ADD CONSTRAINT CHECK_Ejemplar_fechaAdquisicion CHECK (fechaAdquisicion <= TO_DATE('31/12/2025', 'DD/MM/YYYY'));
 ALTER TABLE Ejemplar ADD CONSTRAINT CHECK_Ejemplar_estadoFisico CHECK (estadoFisico IN ('Desgastado', 'Bueno', 'Dañado', 'Restaurado', 'Perdido', 'Nuevo'));
 ALTER TABLE Ejemplar ADD CONSTRAINT CHECK_Ejemplar_disponibilidad CHECK (disponibilidad IN (0,1));
+ALTER TABLE Ejemplar
+MODIFY(
+    estadoFisico NOT NULL,
+    disponibilidad NOT NULL,
+    fechaAdquisicion NOT NULL
+);
 
 -- Edicion
 ALTER TABLE Edicion ADD CONSTRAINT CHECK_Edicion_anio CHECK (anio <= TO_DATE('31/12/2025', 'DD/MM/YYYY'));
 ALTER TABLE Edicion ADD CONSTRAINT CHECK_Edicion_paginas CHECK (paginas > 0);
+ALTER TABLE Edicion
+MODIFY(
+    anio NOT NULL,
+    paginas NOT NULL
+);
 
 -- Editorial
 ALTER TABLE Editorial ADD CONSTRAINT CHECK_Editorial_correo CHECK (REGEXP_LIKE(correo, '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'));
 ALTER TABLE Editorial ADD CONSTRAINT CHECK_Editorial_telefono CHECK (REGEXP_LIKE(telefono, '^[0-9]{10}$'));
 ALTER TABLE Editorial ADD CONSTRAINT CHECK_Editorial_nombre CHECK (REGEXP_LIKE(nombre, '^[A-Za-z0-9áéíóúÁÉÍÓÚüÜñÑ #.-]+$'));
 ALTER TABLE Editorial ADD CONSTRAINT CHECK_Editorial_pais CHECK (REGEXP_LIKE(pais, '^[A-Za-z0-9áéíóúÁÉÍÓÚüÜñÑ #.-]+$'));
+ALTER TABLE Editorial
+MODIFY(
+    nombre NOT NULL,
+    correo NOT NULL,
+    telefono NOT NULL,
+    pais NOT NULL
+);
 
 -- Producto_Compra
 ALTER TABLE Producto_Compra ADD CONSTRAINT CHECK_Producto_Compra_cantidad CHECK (cantidad > 0);
 ALTER TABLE Producto_Compra ADD CONSTRAINT CHECK_Producto_Compra_precioUnidad CHECK (precioUnidad > 0.0);
+ALTER TABLE Producto_Compra
+MODIFY(
+    precioUnidad NOT NULL,
+    cantidad NOT NULL
+);
 
 -- Compra
 ALTER TABLE Compra ADD CONSTRAINT CHECK_Compra_fecha CHECK (fecha <= TO_DATE('31/12/2025', 'DD/MM/YYYY'));
 ALTER TABLE Compra ADD CONSTRAINT CHECK_Compra_total CHECK (total > 0.0);
 ALTER TABLE Compra ADD CONSTRAINT CHECK_Compra_estado CHECK (estado IN ('PENDIENTE', 'COMPLETADO', 'RECHAZADO'));
+ALTER TABLE Compra
+MODIFY(
+    fecha NOT NULL,
+    total NOT NULL,
+    estado NOT NULL
+);
 
 -- Proveedor
 ALTER TABLE Proveedor ADD CONSTRAINT CHECK_Proveedor_correo CHECK (REGEXP_LIKE(correo, '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'));
@@ -60,3 +114,10 @@ ALTER TABLE Proveedor ADD CONSTRAINT CHECK_Proveedor_nombre CHECK (REGEXP_LIKE(n
 ALTER TABLE Proveedor ADD CONSTRAINT CHECK_Proveedor_apellidos CHECK (REGEXP_LIKE(apellidos, '^[A-Za-z0-9áéíóúÁÉÍÓÚüÜñÑ #.-]+$'));
 ALTER TABLE Proveedor ADD CONSTRAINT CHECK_Proveedor_empresa CHECK (REGEXP_LIKE(empresa, '^[A-Za-z0-9áéíóúÁÉÍÓÚüÜñÑ #.-]+$'));
 ALTER TABLE Proveedor ADD CONSTRAINT CHECK_Proveedor_telefono CHECK (REGEXP_LIKE(telefono, '^[0-9]{10}$'));
+ALTER TABLE Proveedor
+MODIFY(
+    nombre NOT NULL,
+    apellidos NOT NULL,
+    correo NOT NULL,
+    empresa NOT NULL
+);

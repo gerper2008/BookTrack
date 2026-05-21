@@ -15,6 +15,10 @@ BEGIN PC_CATEGORIA.AD_CATEGORIA('Historia', 'Duplicado'); END;
 BEGIN PC_AUTOR.AD_AUTOR(NULL, 'Apellido', 'Masculino', 'Colombiana'); END;
 /
 
+insert into autor (nombre, apellidos, genero, nacionalidad) values (NULL, 'Apellido2', 'Masculino', 'Colombiana2');
+
+DELETE FROM AUTOR WHERE apellidos='Apellido';
+
 -- NoOK-04: Autor con apellidos NULL
 BEGIN PC_AUTOR.AD_AUTOR('Nombre', NULL, 'Masculino', 'Colombiana'); END;
 /

@@ -3,7 +3,7 @@
 ---------------------------------------------------------------------------------------------
 
 -- Categoria
-INSERT INTO Categoria (id, nombre, descripcion) VALUES ('CAT001', 'Ficcion', 'Narrativa imaginativa y mundos inventados');
+INSERT INTO Categoria (id, nombre, descripcion) VALUES ('CAT001', 'Literatura', 'Narrativa imaginativa y mundos inventados');
 INSERT INTO Categoria (id, nombre, descripcion) VALUES ('CAT002', 'Historia', 'Relatos y analisis de eventos historicos');
 INSERT INTO Categoria (id, nombre, descripcion) VALUES ('CAT003', 'Ciencia', 'Divulgacion cientifica y conocimiento empirico');
 INSERT INTO Categoria (id, nombre, descripcion) VALUES ('CAT004', 'Filosofia', 'Pensamiento critico y reflexion existencial');
@@ -587,7 +587,7 @@ INSERT INTO Producto_Compra (id, cantidad, precioUnidad, idCompra, idLibro) VALU
 -- ===== VIOLACIONES DE CLAVE PRIMARIA (PK duplicada) =====
 
 -- PK duplicada en Categoria
-INSERT INTO Categoria VALUES ('CAT001', 'Duplicado', 'Viola PRIMARY KEY de Categoria');
+INSERT INTO Categoria (id, nombre, descripcion) VALUES ('CAT001', 'Duplicado', 'Viola PRIMARY KEY de Categoria');
 
 -- PK duplicada en Autor
 INSERT INTO Autor VALUES ('AUT001', 'Clon', 'Apellido', 'Masculino', 'Colombiana');
@@ -596,8 +596,9 @@ INSERT INTO Autor VALUES ('AUT001', 'Clon', 'Apellido', 'Masculino', 'Colombiana
 INSERT INTO Libro VALUES ('LIB001', 'Titulo clon', TO_DATE('2000-01-01','YYYY-MM-DD'), 'Espanol', 'Viola PRIMARY KEY de Libro', 'CAT001');
 
 -- PK duplicada en Editorial
-INSERT INTO Editorial VALUES ('ED001', 'nuevo@correo.com', '3000000001', 'Editorial Clon', 'Mexico');
+INSERT INTO Editorial (id, correo, telefono, nombre, pais) VALUES ('EDT001', 'nuevo@correo.com', '3000000001', 'Editorial Clon', 'Mexico');
 
+--DELETE FROM EDITORIAL WHERE id='EDI001';
 -- ===== VIOLACIONES DE CLAVE FORANEA (FK a registro inexistente) =====
 
 -- Libro con idCategoria que no existe
