@@ -19,7 +19,6 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE('=== PASO 1: Registro proveedor ===');
 
     INSERT INTO Proveedor(
-        id,
         nombre,
         apellidos,
         correo,
@@ -27,7 +26,6 @@ BEGIN
         telefono
     )
     VALUES (
-        'PRV900',
         'Andres',
         'Lopez',
         'andres@libros.com',
@@ -42,9 +40,10 @@ END;
 /
 
 -- Verificación paso 1
+SELECT * FROM PROVEEDOR ORDER BY ID DESC; -- VER ULTIMO ID
 SELECT *
 FROM Proveedor
-WHERE id = 'PRV900';
+WHERE id = 'PRV054';
 
 
 -- PASO 2 ----------------------------------------------------------------------
@@ -53,15 +52,13 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE('=== PASO 2: Registro compra ===');
 
     INSERT INTO Compra(
-        id,
         idProveedor,
         fecha,
         total,
         estado
     )
     VALUES (
-        'COM900',
-        'PRV900',
+        'PRV054',
         DATE '2025-02-01',
         850000,
         'PENDIENTE'
@@ -74,9 +71,10 @@ END;
 /
 
 -- Verificación paso 2
+SELECT * FROM Compra ORDER BY ID DESC; -- VER ULTIMO ID
 SELECT *
 FROM Compra
-WHERE id = 'COM900';
+WHERE id = 'COM055';
 
 
 -- PASO 3 ----------------------------------------------------------------------
@@ -85,15 +83,12 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE('=== PASO 3: Registro productos compra ===');
 
     INSERT INTO Producto_Compra(
-        id,
-        idCompra,
         idLibro,
         cantidad,
         precioUnidad
     )
     VALUES (
-        'PC900',
-        'COM900',
+        'COM055',
         'LIB001',
         5,
         90000
@@ -106,6 +101,7 @@ END;
 /
 
 -- Verificación paso 3
+SELECT * FROM Compra ORDER BY ID DESC; -- VER ULTIMO ID
 SELECT *
 FROM Producto_Compra
 WHERE idCompra = 'COM900';
