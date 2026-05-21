@@ -51,14 +51,5 @@ EXCEPTION
 END;
 /
  
-BEGIN
-    EXECUTE IMMEDIATE 'GRANT EXECUTE ON PC_SEGURIDAD TO ROL_ADMINISTRADOR';
-EXCEPTION
-    WHEN OTHERS THEN
-        IF SQLCODE = -4042 THEN
-            NULL;
-        ELSE
-            RAISE;
-        END IF;
-END;
-/
+-- Solo se usa PK_ADMINISTRADOR en este modelo de seguridad.
+-- No se otorgan permisos sobre paquetes obsoletos como PC_SEGURIDAD.

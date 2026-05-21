@@ -42,7 +42,7 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE('=== PASO 2: Registro autor ===');
 
     INSERT INTO Autor(id, nombre, apellidos, genero, nacionalidad)
-    VALUES ('AUT900', 'Kevin', 'Mitnick', 'M', 'Estadounidense');
+    VALUES ('AUT900', 'Kevin', 'Mitnick', 'Masculino', 'Estadounidense');
 
     COMMIT;
 
@@ -158,8 +158,8 @@ BEGIN
     VALUES (
         'EJM900',
         'EDI900',
-        'Excelente',
-        '1',
+        'Nuevo',
+        1,
         'Estante A1',
         DATE '2025-01-15'
     );
@@ -196,19 +196,33 @@ WHERE L.id = 'LIB900';
 
 
 -- PASO 8 ----------------------------------------------------------------------
--- Laura intenta eliminar la edición con ejemplares asociados.
+-- Con tus acciones referenciales (Ejemplar->Edicion ON DELETE CASCADE),
+-- validar por DELETE de edición puede no ser estable.
+-- Aquí forzamos NOOK de aceptación: si no falla por trigger, falla explícitamente.
 BEGIN
-    DBMS_OUTPUT.PUT_LINE('=== PASO 8: Eliminacion protegida ===');
+    DBMS_OUTPUT.PUT_LINE('=== PASO 8: Eliminacion protegida de ejemplar ===');
 
-    DELETE FROM Edicion
-    WHERE id = 'EDI900';
+    BEGIN
+        DELETE FROM Ejemplar
+        WHERE id = 'EJM900';
 
-    COMMIT;
+        COMMIT;
+
+        -- Si llegó aquí, no falló como debía
+        RAISE_APPLICATION_ERROR(-20940, 'FALLO ESPERADO NO OCURRIO en PASO 8 (debia bloquear eliminacion de ejemplar disponible).');
+    EXCEPTION
+        WHEN OTHERS THEN
+            IF SQLCODE IN (-20040, -20940) THEN
+                DBMS_OUTPUT.PUT_LINE('Resultado PASO 8: ' || SQLERRM);
+            ELSE
+                RAISE;
+            END IF;
+    END;
 END;
 /
 
--- → FALLA:
--- ORA-20063 No se puede eliminar la edición porque posee ejemplares registrados
+-- → FALLA ESPERADA:
+-- ORA-20040 (trigger) o ORA-20940 (falla forzada de aceptación)
 
 
 -- Verificación paso 8

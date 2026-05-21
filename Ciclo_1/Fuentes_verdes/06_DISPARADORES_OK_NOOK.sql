@@ -1,447 +1,266 @@
 ---------------------------------------------------------------------------------------------
+-- DISPARADORES OK / NO OK (SIN COLISIONES)
+-- Casos estables con IDs aislados prefijo ZV
+---------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------
+-- PRECONDICIONES BASE
+---------------------------------------------------------------------------------------------
+INSERT INTO Categoria (id, nombre, descripcion)
+VALUES ('CATZV60', 'Categoria ZV Disparadores', 'Base para pruebas de disparadores');
+
+INSERT INTO Editorial (id, correo, telefono, nombre, pais)
+VALUES ('EDTZV60', 'editorial.zv60@test.com', '3206000060', 'Editorial ZV 60', 'Colombia');
+
+INSERT INTO Editorial (id, correo, telefono, nombre, pais)
+VALUES ('EDTZV61', 'editorial.zv61@test.com', '3206000061', 'Editorial ZV 61', 'Colombia');
+
+INSERT INTO Proveedor (id, correo, nombre, apellidos, empresa, telefono)
+VALUES ('PRVZV60', 'proveedor.zv60@test.com', 'Pablo', 'Zurita', 'Proveedor ZV 60', '3216000060');
+
+COMMIT;
+
+---------------------------------------------------------------------------------------------
 -- DISPARADORES OK
 ---------------------------------------------------------------------------------------------
 
----------------------------------------------------------------------------------------------
--- DISP-01 OK
--- Generación automática de idCategoria
----------------------------------------------------------------------------------------------
+-- DISP-01 OK: Generación automática de idCategoria
+INSERT INTO Categoria (nombre, descripcion)
+VALUES ('Categoria Auto ZV', 'Prueba autogeneracion de categoria');
 
-INSERT INTO Categoria(nombre, descripcion)
+-- DISP-02 OK: Generación automática de idLibro
+INSERT INTO Libro (titulo, fecha_publicacion, idioma, descripcion, idCategoria)
 VALUES (
-    'Astronomia',
-    'Libros sobre el espacio'
-);
-
--- Verificar:
--- SELECT * FROM Categoria ORDER BY id DESC;
--- Resultado esperado: id autogenerado tipo CAT###
-
----------------------------------------------------------------------------------------------
--- DISP-02 OK
--- Generación automática de idLibro
----------------------------------------------------------------------------------------------
-
-INSERT INTO Libro(
-    titulo,
-    fecha_publicacion,
-    idioma,
-    descripcion,
-    idCategoria
-)
-VALUES (
-    'Dune',
-    TO_DATE('1965-01-01','YYYY-MM-DD'),
+    'Libro Auto ZV',
+    TO_DATE('2015-01-01','YYYY-MM-DD'),
     'Espanol',
-    'Novela de ciencia ficción',
-    'CAT001'
+    'Prueba autogeneracion de libro',
+    'CATZV60'
 );
 
 COMMIT;
 
--- Resultado esperado:
--- id generado automáticamente tipo LIB###
-
----------------------------------------------------------------------------------------------
--- DISP-03 OK
--- Modificar título de libro SIN ediciones
----------------------------------------------------------------------------------------------
-
--- Crear libro temporal sin ediciones
-INSERT INTO Libro(
-    titulo,
-    fecha_publicacion,
-    idioma,
-    descripcion,
-    idCategoria
-)
+-- DISP-03 OK: Modificar título de libro SIN ediciones
+INSERT INTO Libro (id, titulo, fecha_publicacion, idioma, descripcion, idCategoria)
 VALUES (
-    'Libro Editable',
+    'LIBZV61',
+    'Libro Editable ZV',
     TO_DATE('2020-01-01','YYYY-MM-DD'),
     'Espanol',
-    'Temporal',
-    'CAT001'
+    'Sin ediciones asociadas',
+    'CATZV60'
 );
 
-COMMIT;
-
--- Modificación permitida
 UPDATE Libro
-SET titulo = 'Libro Editado Correctamente'
-WHERE titulo = 'Libro Editable';
+SET titulo = 'Libro Editado ZV'
+WHERE id = 'LIBZV61';
 
 COMMIT;
 
----------------------------------------------------------------------------------------------
--- DISP-04 OK
--- Generación automática de idAutor
----------------------------------------------------------------------------------------------
+-- DISP-04 OK: Generación automática de idAutor
+INSERT INTO Autor (nombre, apellidos, genero, nacionalidad)
+VALUES ('Autor', 'AutoZV', 'Masculino', 'Colombiana');
 
-INSERT INTO Autor(
-    nombre,
-    apellidos,
-    genero,
-    nacionalidad
-)
+COMMIT;
+
+-- DISP-05 OK: Generación automática de idEdicion
+INSERT INTO Libro (id, titulo, fecha_publicacion, idioma, descripcion, idCategoria)
 VALUES (
-    'Mario',
-    'Vargas Llosa',
-    'Masculino',
-    'Peruana'
+    'LIBZV62',
+    'Libro para Edicion Auto',
+    TO_DATE('2018-01-01','YYYY-MM-DD'),
+    'Espanol',
+    'Base para edicion auto',
+    'CATZV60'
 );
 
-COMMIT;
-
----------------------------------------------------------------------------------------------
--- DISP-05 OK
--- Generación automática de idEdicion
----------------------------------------------------------------------------------------------
-
-INSERT INTO Edicion(
-    anio,
-    paginas,
-    idLibro,
-    idEditorial
-)
+INSERT INTO Edicion (anio, paginas, idLibro, idEditorial)
 VALUES (
     TO_DATE('2022-01-01','YYYY-MM-DD'),
-    450,
-    'LIB001',
-    'EDT001'
+    300,
+    'LIBZV62',
+    'EDTZV60'
 );
 
 COMMIT;
 
----------------------------------------------------------------------------------------------
--- DISP-06 OK
--- Modificar edición SIN ejemplares asociados
----------------------------------------------------------------------------------------------
-
--- Crear libro temporal
-INSERT INTO Libro(
-    titulo,
-    fecha_publicacion,
-    idioma,
-    descripcion,
-    idCategoria
-)
+-- DISP-06 OK: Modificar edición SIN ejemplares asociados
+INSERT INTO Edicion (id, idLibro, idEditorial, anio, paginas)
 VALUES (
-    'Libro Temporal Edicion',
-    TO_DATE('2020-01-01','YYYY-MM-DD'),
-    'Espanol',
-    'Temporal',
-    'CAT001'
-);
-
--- Crear edición temporal
-INSERT INTO Edicion(
-    anio,
-    paginas,
-    idLibro,
-    idEditorial
-)
-VALUES (
-    TO_DATE('2024-01-01','YYYY-MM-DD'),
-    200,
-    'LIB002',
-    'EDT001'
-);
-
-COMMIT;
-
--- Modificación válida
-UPDATE Edicion
-SET idEditorial = 'EDT002'
-WHERE paginas = 200;
-
-COMMIT;
-
----------------------------------------------------------------------------------------------
--- DISP-07 OK
--- Eliminar edición SIN ejemplares
----------------------------------------------------------------------------------------------
-
--- Crear edición temporal
-INSERT INTO Edicion(
-    anio,
-    paginas,
-    idLibro,
-    idEditorial
-)
-VALUES (
+    'EDIZV63',
+    'LIBZV62',
+    'EDTZV60',
     TO_DATE('2023-01-01','YYYY-MM-DD'),
-    150,
-    'LIB001',
-    'EDT001'
+    200
 );
 
--- Verificar cantidad de ejemplares de esa edición
-SELECT 
-    E.id AS id_edicion,
-    COUNT(EJ.id) AS cantidad_ejemplares
-FROM Edicion E
-LEFT JOIN Ejemplar EJ
-    ON EJ.idEdicion = E.id
-WHERE E.paginas = 150
-GROUP BY E.id;
-
--- Eliminación válida
-DELETE FROM Edicion
-WHERE paginas = 150;
+UPDATE Edicion
+SET idEditorial = 'EDTZV61'
+WHERE id = 'EDIZV63';
 
 COMMIT;
 
----------------------------------------------------------------------------------------------
--- DISP-08 OK
--- Generación automática de idEditorial
----------------------------------------------------------------------------------------------
-
-INSERT INTO Editorial(
-    nombre,
-    correo,
-    telefono,
-    pais
-)
+-- DISP-07 OK: Eliminar edición SIN ejemplares
+INSERT INTO Edicion (id, idLibro, idEditorial, anio, paginas)
 VALUES (
-    'Editorial Temporal',
-    'editorialtemp@test.com',
-    '3114445555',
+    'EDIZV64',
+    'LIBZV62',
+    'EDTZV60',
+    TO_DATE('2024-01-01','YYYY-MM-DD'),
+    150
+);
+
+DELETE FROM Edicion
+WHERE id = 'EDIZV64';
+
+COMMIT;
+
+-- DISP-08 OK: Generación automática de idEditorial
+INSERT INTO Editorial (nombre, correo, telefono, pais)
+VALUES (
+    'Editorial Auto ZV',
+    'editorial.auto.zv@test.com',
+    '3206000099',
     'Colombia'
 );
 
 COMMIT;
 
--- Consultar
-SELECT * FROM Editorial WHERE nombre = 'Editorial Temporal';
-
----------------------------------------------------------------------------------------------
--- DISP-09 OK
--- Eliminar editorial SIN ediciones asociadas
----------------------------------------------------------------------------------------------
-
--- Crear editorial temporal
-INSERT INTO Editorial(
-    nombre,
-    correo,
-    telefono,
-    pais
-)
+-- DISP-09 OK: Eliminar editorial SIN ediciones asociadas
+INSERT INTO Editorial (id, correo, telefono, nombre, pais)
 VALUES (
-    'Editorial Eliminable',
-    'elim@test.com',
-    '3008881111',
+    'EDTZV69',
+    'editorial.zv69@test.com',
+    '3206000069',
+    'Editorial Eliminable ZV',
     'Chile'
 );
 
-COMMIT;
-
--- Verificar cantidad de ediciones de esa editorial
-SELECT 
-    E.id AS id_editorial,
-    E.nombre,
-    COUNT(ED.id) AS cantidad_ediciones
-FROM Editorial E
-LEFT JOIN Edicion ED
-    ON ED.idEditorial = E.id
-WHERE E.id = 'EDT001'
-GROUP BY E.id, E.nombre;
-
 DELETE FROM Editorial
-WHERE correo = 'elim@test.com';
+WHERE id = 'EDTZV69';
 
 COMMIT;
 
----------------------------------------------------------------------------------------------
--- DISP-10 OK
--- Generación automática de idEjemplar
----------------------------------------------------------------------------------------------
-
-INSERT INTO Ejemplar(
-    idEdicion,
-    estadoFisico,
-    disponibilidad,
-    localizacion,
-    fechaAdquisicion
-)
+-- DISP-10 OK: Generación automática de idEjemplar
+INSERT INTO Edicion (id, idLibro, idEditorial, anio, paginas)
 VALUES (
-    'EDI001',
+    'EDIZV70',
+    'LIBZV62',
+    'EDTZV60',
+    TO_DATE('2021-01-01','YYYY-MM-DD'),
+    220
+);
+
+INSERT INTO Ejemplar (idEdicion, estadoFisico, disponibilidad, localizacion, fechaAdquisicion)
+VALUES (
+    'EDIZV70',
     'Bueno',
     0,
-    'Bodega Norte',
+    'Bodega ZV 70',
     TO_DATE('2024-01-01','YYYY-MM-DD')
 );
 
 COMMIT;
 
----------------------------------------------------------------------------------------------
--- DISP-11 OK
--- Eliminar ejemplar NO disponible
----------------------------------------------------------------------------------------------
-
--- Crear ejemplar no disponible
-INSERT INTO Ejemplar(
-    idEdicion,
-    estadoFisico,
-    disponibilidad,
-    localizacion,
-    fechaAdquisicion
-)
+-- DISP-11 OK: Eliminar ejemplar NO disponible
+INSERT INTO Ejemplar (id, idEdicion, estadoFisico, disponibilidad, localizacion, fechaAdquisicion)
 VALUES (
-    'EDI001',
-    'Regular',
+    'EJMZV71',
+    'EDIZV70',
+    'Bueno',
     0,
-    'Bodega',
+    'Bodega ZV 71',
     TO_DATE('2024-01-01','YYYY-MM-DD')
 );
-
-COMMIT;
 
 DELETE FROM Ejemplar
-WHERE localizacion = 'Bodega';
+WHERE id = 'EJMZV71';
 
 COMMIT;
 
----------------------------------------------------------------------------------------------
--- DISP-12 OK
--- Generación automática de idCompra
----------------------------------------------------------------------------------------------
-
-INSERT INTO Compra(
-    fecha,
-    total,
-    estado,
-    idProveedor
-)
+-- DISP-12 OK: Generación automática de idCompra
+INSERT INTO Compra (fecha, total, estado, idProveedor)
 VALUES (
     TO_DATE('2025-01-01','YYYY-MM-DD'),
     100000,
     'COMPLETADO',
-    'PRV001'
+    'PRVZV60'
 );
 
 COMMIT;
 
----------------------------------------------------------------------------------------------
--- DISP-13 OK
--- Estado inicial forzado a PENDIENTE
----------------------------------------------------------------------------------------------
-
-INSERT INTO Compra(
-    fecha,
-    total,
-    estado,
-    idProveedor
-)
+-- DISP-13 OK: Estado inicial forzado a PENDIENTE
+INSERT INTO Compra (id, fecha, total, estado, idProveedor)
 VALUES (
+    'COMZV73',
     TO_DATE('2025-02-01','YYYY-MM-DD'),
     200000,
     'COMPLETADO',
-    'PRV001'
+    'PRVZV60'
 );
+
+-- Verificar:
+-- SELECT estado FROM Compra WHERE id = 'COMZV73';
+-- Esperado: PENDIENTE
 
 COMMIT;
 
--- Verificar:
--- SELECT estado FROM Compra ORDER BY id DESC;
--- Resultado esperado: PENDIENTE
-
----------------------------------------------------------------------------------------------
--- DISP-14 OK
--- Modificar compra en estado PENDIENTE
----------------------------------------------------------------------------------------------
-
-INSERT INTO Compra(
-    fecha,
-    total,
-    estado,
-    idProveedor
-)
+-- DISP-14 OK: Modificar compra en estado PENDIENTE
+INSERT INTO Compra (id, fecha, total, estado, idProveedor)
 VALUES (
+    'COMZV74',
     TO_DATE('2025-03-01','YYYY-MM-DD'),
     50000,
     'PENDIENTE',
-    'PRV001'
+    'PRVZV60'
 );
-
-COMMIT;
 
 UPDATE Compra
 SET total = 70000
-WHERE total = 50000;
+WHERE id = 'COMZV74';
 
 COMMIT;
 
----------------------------------------------------------------------------------------------
--- DISP-15 OK
--- Eliminar compra en estado PENDIENTE
----------------------------------------------------------------------------------------------
-
-INSERT INTO Compra(
-    fecha,
-    total,
-    estado,
-    idProveedor
-)
+-- DISP-15 OK: Eliminar compra en estado PENDIENTE
+INSERT INTO Compra (id, fecha, total, estado, idProveedor)
 VALUES (
+    'COMZV75',
     TO_DATE('2025-04-01','YYYY-MM-DD'),
     30000,
     'PENDIENTE',
-    'PRV001'
+    'PRVZV60'
 );
 
-COMMIT;
-
 DELETE FROM Compra
-WHERE total = 30000;
+WHERE id = 'COMZV75';
 
 COMMIT;
 
----------------------------------------------------------------------------------------------
--- DISP-16 OK
--- Generación automática de idProveedor
----------------------------------------------------------------------------------------------
-
-INSERT INTO Proveedor(
-    nombre,
-    apellidos,
-    correo,
-    empresa,
-    telefono
-)
+-- DISP-16 OK: Generación automática de idProveedor
+INSERT INTO Proveedor (nombre, apellidos, correo, empresa, telefono)
 VALUES (
     'Carlos',
     'Ramirez',
-    'proveedor@test.com',
-    'Distribuidora Norte',
-    '3001112222'
+    'proveedor.auto.zv@test.com',
+    'Distribuidora Auto ZV',
+    '3216000099'
 );
 
 COMMIT;
 
----------------------------------------------------------------------------------------------
--- DISP-17 OK
--- Eliminar proveedor SIN compras
----------------------------------------------------------------------------------------------
-
-INSERT INTO Proveedor(
-    nombre,
-    apellidos,
-    correo,
-    empresa,
-    telefono
-)
+-- DISP-17 OK: Eliminar proveedor SIN compras
+INSERT INTO Proveedor (id, nombre, apellidos, correo, empresa, telefono)
 VALUES (
+    'PRVZV77',
     'Proveedor',
-    'Temporal',
-    'tempproveedor@test.com',
-    'Empresa Temporal',
-    '3119998888'
+    'TemporalZV',
+    'tempproveedor.zv@test.com',
+    'Empresa Temporal ZV',
+    '3216000077'
 );
-
-COMMIT;
 
 DELETE FROM Proveedor
-WHERE correo = 'tempproveedor@test.com';
+WHERE id = 'PRVZV77';
 
 COMMIT;
 
@@ -449,125 +268,160 @@ COMMIT;
 -- DISPARADORES NO OK
 ---------------------------------------------------------------------------------------------
 
----------------------------------------------------------------------------------------------
--- DISP-03 NO OK
--- No modificar título de libro con ediciones
----------------------------------------------------------------------------------------------
-
--- Error esperado:
--- ORA-20020
-UPDATE Libro
-SET titulo = 'Titulo Prohibido'
-WHERE id = 'LIB001';
-
-ROLLBACK;
-
----------------------------------------------------------------------------------------------
--- DISP-06 NO OK
--- No modificar libro/editorial de edición con ejemplares
----------------------------------------------------------------------------------------------
-
--- Error esperado:
--- ORA-20030
-UPDATE Edicion
-SET idEditorial = 'EDT002'
-WHERE id = 'EDI001';
-
-ROLLBACK;
-
----------------------------------------------------------------------------------------------
--- DISP-07 NO OK
--- No eliminar edición con ejemplares
----------------------------------------------------------------------------------------------
-
--- Error esperado:
--- ORA-20063
-DELETE FROM Edicion
-WHERE id = 'EDI001';
-
-ROLLBACK;
-
----------------------------------------------------------------------------------------------
--- DISP-09 NO OK
--- No eliminar editorial con ediciones
----------------------------------------------------------------------------------------------
-
--- Error esperado:
--- ORA-20072
-DELETE FROM Editorial
-WHERE id = 'EDT001';
-
-ROLLBACK;
-
----------------------------------------------------------------------------------------------
--- DISP-11 NO OK
--- No eliminar ejemplar disponible
----------------------------------------------------------------------------------------------
-
--- Error esperado:
--- ORA-20040
-DELETE FROM Ejemplar
-WHERE id = 'EJM001';
-
-ROLLBACK;
-
----------------------------------------------------------------------------------------------
--- DISP-14 NO OK
--- No modificar compra NO pendiente
----------------------------------------------------------------------------------------------
-
--- Crear compra completada
-INSERT INTO Compra(
-    fecha,
-    total,
-    estado,
-    idProveedor
-)
+-- DISP-03 NO OK: No modificar título de libro con ediciones
+INSERT INTO Libro (id, titulo, fecha_publicacion, idioma, descripcion, idCategoria)
 VALUES (
+    'LIBZV80',
+    'Libro con Edicion',
+    TO_DATE('2020-01-01','YYYY-MM-DD'),
+    'Espanol',
+    'No debe dejar cambiar titulo',
+    'CATZV60'
+);
+
+INSERT INTO Edicion (id, idLibro, idEditorial, anio, paginas)
+VALUES (
+    'EDIZV80',
+    'LIBZV80',
+    'EDTZV60',
+    TO_DATE('2021-01-01','YYYY-MM-DD'),
+    180
+);
+
+-- Error esperado: ORA-20020
+UPDATE Libro
+SET titulo = 'Titulo Prohibido ZV'
+WHERE id = 'LIBZV80';
+
+ROLLBACK;
+
+-- DISP-06 NO OK: No modificar libro/editorial de edición con ejemplares
+INSERT INTO Edicion (id, idLibro, idEditorial, anio, paginas)
+VALUES (
+    'EDIZV81',
+    'LIBZV62',
+    'EDTZV60',
+    TO_DATE('2021-01-01','YYYY-MM-DD'),
+    190
+);
+
+INSERT INTO Ejemplar (id, idEdicion, estadoFisico, disponibilidad, localizacion, fechaAdquisicion)
+VALUES (
+    'EJMZV81',
+    'EDIZV81',
+    'Bueno',
+    1,
+    'Sala ZV 81',
+    TO_DATE('2024-01-01','YYYY-MM-DD')
+);
+
+-- Error esperado: ORA-20030
+UPDATE Edicion
+SET idEditorial = 'EDTZV61'
+WHERE id = 'EDIZV81';
+
+ROLLBACK;
+
+-- DISP-07 NO OK: No eliminar edición con ejemplares
+-- Error esperado: ORA-20063
+DELETE FROM Edicion
+WHERE id = 'EDIZV81';
+
+ROLLBACK;
+
+-- DISP-09 NO OK: No eliminar editorial con ediciones
+INSERT INTO Editorial (id, correo, telefono, nombre, pais)
+VALUES (
+    'EDTZV82',
+    'editorial.zv82@test.com',
+    '3206000082',
+    'Editorial Bloqueada ZV',
+    'Colombia'
+);
+
+INSERT INTO Edicion (id, idLibro, idEditorial, anio, paginas)
+VALUES (
+    'EDIZV82',
+    'LIBZV62',
+    'EDTZV82',
+    TO_DATE('2020-01-01','YYYY-MM-DD'),
+    210
+);
+
+-- Error esperado: ORA-20072
+DELETE FROM Editorial
+WHERE id = 'EDTZV82';
+
+ROLLBACK;
+
+-- DISP-11 NO OK: No eliminar ejemplar disponible
+INSERT INTO Ejemplar (id, idEdicion, estadoFisico, disponibilidad, localizacion, fechaAdquisicion)
+VALUES (
+    'EJMZV83',
+    'EDIZV70',
+    'Bueno',
+    1,
+    'Sala ZV 83',
+    TO_DATE('2024-01-01','YYYY-MM-DD')
+);
+
+-- Error esperado: ORA-20040
+DELETE FROM Ejemplar
+WHERE id = 'EJMZV83';
+
+ROLLBACK;
+
+-- DISP-14 NO OK: No modificar compra NO pendiente
+INSERT INTO Compra (id, fecha, total, estado, idProveedor)
+VALUES (
+    'COMZV84',
     TO_DATE('2025-05-01','YYYY-MM-DD'),
     90000,
     'COMPLETADO',
-    'PRV001'
+    'PRVZV60'
 );
 
-COMMIT;
-
--- El trigger la deja en PENDIENTE,
--- así que primero se cambia manualmente
+-- El trigger la deja en PENDIENTE; primero la pasamos a COMPLETADO
 UPDATE Compra
 SET estado = 'COMPLETADO'
-WHERE total = 90000;
+WHERE id = 'COMZV84';
 
-COMMIT;
-
--- Error esperado:
--- ORA-20060
+-- Error esperado: ORA-20060
 UPDATE Compra
 SET total = 120000
-WHERE total = 90000;
+WHERE id = 'COMZV84';
 
 ROLLBACK;
 
----------------------------------------------------------------------------------------------
--- DISP-15 NO OK
--- No eliminar compra NO pendiente
----------------------------------------------------------------------------------------------
-
--- Error esperado:
--- ORA-20061
+-- DISP-15 NO OK: No eliminar compra NO pendiente
+-- Error esperado: ORA-20061
 DELETE FROM Compra
-WHERE total = 90000;
+WHERE id = 'COMZV84';
 
 ROLLBACK;
 
----------------------------------------------------------------------------------------------
--- DISP-17 NO OK
--- No eliminar proveedor con compras
----------------------------------------------------------------------------------------------
+-- DISP-17 NO OK: No eliminar proveedor con compras
+INSERT INTO Proveedor (id, correo, nombre, apellidos, empresa, telefono)
+VALUES (
+    'PRVZV85',
+    'proveedor.zv85@test.com',
+    'Proveedor',
+    'ConCompraZV',
+    'Empresa ZV 85',
+    '3216000085'
+);
 
--- Error esperado:
--- ORA-20101
+INSERT INTO Compra (id, fecha, total, estado, idProveedor)
+VALUES (
+    'COMZV85',
+    TO_DATE('2025-06-01','YYYY-MM-DD'),
+    50000,
+    'PENDIENTE',
+    'PRVZV85'
+);
+
+-- Error esperado: ORA-20101
 DELETE FROM Proveedor
-WHERE id = 'PRV001';
+WHERE id = 'PRVZV85';
 
 ROLLBACK;

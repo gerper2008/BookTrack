@@ -1,22 +1,22 @@
-
 -- ============================================================
--- CRUDNoOK - INTENTO DE INGRESO DE DATOS ERRONEOS
+-- CRUDNoOK - INTENTO DE INGRESO DE DATOS ERRONEOS (DETERMINISTICO)
+-- Estos casos deben FALLAR por restricciones de negocio/integridad.
 -- ============================================================
 
 -- NoOK-01: Categoria con nombre NULL
 BEGIN PC_CATEGORIA.AD_CATEGORIA(NULL, 'Sin nombre'); END;
 /
 
--- NoOK-02: Categoria duplicada
+-- NoOK-02: Categoria duplicada (usa nombre existente de poblar/ejecución previa)
 BEGIN PC_CATEGORIA.AD_CATEGORIA('Historia', 'Duplicado'); END;
 /
 
 -- NoOK-03: Autor con nombre NULL
-BEGIN PC_AUTOR.AD_AUTOR(NULL, 'Apellido', 'M', 'Colombiana'); END;
+BEGIN PC_AUTOR.AD_AUTOR(NULL, 'Apellido', 'Masculino', 'Colombiana'); END;
 /
 
 -- NoOK-04: Autor con apellidos NULL
-BEGIN PC_AUTOR.AD_AUTOR('Nombre', NULL, 'M', 'Colombiana'); END;
+BEGIN PC_AUTOR.AD_AUTOR('Nombre', NULL, 'Masculino', 'Colombiana'); END;
 /
 
 -- NoOK-05: Editorial con nombre NULL
@@ -51,7 +51,7 @@ BEGIN PC_EDICION.AD_EDICION('LIB999', 'EDT001', TO_DATE('2000-01-01','YYYY-MM-DD
 BEGIN PC_EDICION.AD_EDICION('LIB001', 'EDT999', TO_DATE('2000-01-01','YYYY-MM-DD'), 300); END;
 /
 
--- NoOK-13: Edicion con paginas > 999
+-- NoOK-13: Edicion con paginas > 999 (violación tamaño/constraint)
 BEGIN PC_EDICION.AD_EDICION('LIB001', 'EDT001', TO_DATE('2000-01-01','YYYY-MM-DD'), 1500); END;
 /
 
@@ -68,11 +68,11 @@ BEGIN PC_PROVEEDOR.AD_PROVEEDOR(NULL, 'Lopez', 'test@prov.com', 'Empresa X', '30
 /
 
 -- NoOK-17: Compra con proveedor inexistente
-BEGIN PC_COMPRA.AD_COMPRA('PRV999', TO_DATE('2024-01-01','YYYY-MM-DD'), 500000, 'Pendiente'); END;
+BEGIN PC_COMPRA.AD_COMPRA('PRV999', TO_DATE('2024-01-01','YYYY-MM-DD'), 500000, 'PENDIENTE'); END;
 /
 
 -- NoOK-18: Compra con total NULL
-BEGIN PC_COMPRA.AD_COMPRA('PRV001', TO_DATE('2024-01-01','YYYY-MM-DD'), NULL, 'Pendiente'); END;
+BEGIN PC_COMPRA.AD_COMPRA('PRV001', TO_DATE('2024-01-01','YYYY-MM-DD'), NULL, 'PENDIENTE'); END;
 /
 
 -- NoOK-19: Producto_Compra con compra inexistente
@@ -91,15 +91,14 @@ BEGIN PC_COMPRA.AD_PRODUCTO_COMPRA('COM001', 'LIB001', NULL, 50000); END;
 BEGIN PC_USUARIO.AD_USUARIO(NULL, 'Administrador', 'Test', 'User', '3001111111'); END;
 /
 
--- NoOK-23: Usuario con correo duplicado
+-- NoOK-23: Usuario con correo duplicado (de poblar)
 BEGIN PC_USUARIO.AD_USUARIO('admin@booktrack.com', 'Administrador', 'Otro', 'Usuario', '3001111111'); END;
 /
 
 -- NoOK-24: Administrador con usuario inexistente
-BEGIN PC_USUARIO.AD_ADMINISTRADOR('USR999', 'FULL_ACCESS', 'Sede Sur'); END;
+BEGIN PC_USUARIO.AD_ADMINISTRADOR('USR999', 'Total', 'Sede Sur'); END;
 /
 
--- NoOK-25: Modificar titulo de libro con ediciones
+-- NoOK-25: Modificar titulo de libro con ediciones (trigger DISP-03)
 BEGIN PC_LIBRO.MOD_LIBRO('LIB001', 'CAT001', 'Nuevo Titulo Invalido', 'Cambio prohibido', 'Espanol'); END;
 /
-

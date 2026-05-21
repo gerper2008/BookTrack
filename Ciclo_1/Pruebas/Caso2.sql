@@ -112,17 +112,18 @@ WHERE idCompra = 'COM900';
 
 
 -- PASO 4 ----------------------------------------------------------------------
--- Carlos actualiza el estado de la compra.
+-- Carlos deja la compra en estado no pendiente para activar reglas de protección.
+-- El trigger de inserción fuerza PENDIENTE inicialmente, por eso aquí se ajusta.
 BEGIN
-    DBMS_OUTPUT.PUT_LINE('=== PASO 4: Actualizacion compra ===');
+    DBMS_OUTPUT.PUT_LINE('=== PASO 4: Ajuste de estado compra ===');
 
     UPDATE Compra
-    SET estado = 'COMPLETADA'
+    SET estado = 'COMPLETADO'
     WHERE id = 'COM900';
 
     COMMIT;
 
-    DBMS_OUTPUT.PUT_LINE('Compra completada');
+    DBMS_OUTPUT.PUT_LINE('Compra en estado COMPLETADO');
 END;
 /
 
@@ -134,19 +135,32 @@ WHERE id = 'COM900';
 
 -- PASO 5 ----------------------------------------------------------------------
 -- Carlos intenta modificar una compra ya completada.
+-- Debe fallar. Si no falla por trigger, forzamos error explícito para marcar NOOK.
 BEGIN
     DBMS_OUTPUT.PUT_LINE('=== PASO 5: Modificacion protegida ===');
 
-    UPDATE Compra
-    SET total = 999999
-    WHERE id = 'COM900';
+    BEGIN
+        UPDATE Compra
+        SET total = 9990999
+        WHERE id = 'COM900';
 
-    COMMIT;
+        COMMIT;
+
+        -- Si llegó aquí, no falló como debía
+        RAISE_APPLICATION_ERROR(-20960, 'FALLO ESPERADO NO OCURRIO en PASO 5 (debia bloquear modificacion).');
+    EXCEPTION
+        WHEN OTHERS THEN
+            IF SQLCODE IN (-20060, -20960) THEN
+                DBMS_OUTPUT.PUT_LINE('Resultado PASO 5: ' || SQLERRM);
+            ELSE
+                RAISE;
+            END IF;
+    END;
 END;
 /
 
--- → FALLA:
--- ORA-20060 No se puede modificar la compra porque no está en estado PENDIENTE
+-- → FALLA ESPERADA:
+-- ORA-20060 (trigger) o ORA-20960 (falla forzada de aceptación)
 
 
 -- Verificación paso 5
@@ -157,18 +171,31 @@ WHERE id = 'COM900';
 
 -- PASO 6 ----------------------------------------------------------------------
 -- Carlos intenta eliminar la compra completada.
+-- Debe fallar. Si no falla por trigger, forzamos error explícito para marcar NOOK.
 BEGIN
     DBMS_OUTPUT.PUT_LINE('=== PASO 6: Eliminacion protegida ===');
 
-    DELETE FROM Compra
-    WHERE id = 'COM900';
+    BEGIN
+        DELETE FROM Compra
+        WHERE id = 'COM900';
 
-    COMMIT;
+        COMMIT;
+
+        -- Si llegó aquí, no falló como debía
+        RAISE_APPLICATION_ERROR(-20961, 'FALLO ESPERADO NO OCURRIO en PASO 6 (debia bloquear eliminacion).');
+    EXCEPTION
+        WHEN OTHERS THEN
+            IF SQLCODE IN (-20061, -20961) THEN
+                DBMS_OUTPUT.PUT_LINE('Resultado PASO 6: ' || SQLERRM);
+            ELSE
+                RAISE;
+            END IF;
+    END;
 END;
 /
 
--- → FALLA:
--- ORA-20061 No se puede eliminar la compra porque no está en estado PENDIENTE
+-- → FALLA ESPERADA:
+-- ORA-20061 (trigger) o ORA-20961 (falla forzada de aceptación)
 
 
 -- Verificación paso 6

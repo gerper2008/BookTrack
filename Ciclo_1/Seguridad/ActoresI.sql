@@ -8,9 +8,16 @@ CREATE OR REPLACE PACKAGE BODY PK_ADMINISTRADOR AS
     -- CATEGORIA
     ------------------------------------------------------------
     PROCEDURE AD_CATEGORIA (xNOMBRE IN VARCHAR2, xDESCRIPCION IN VARCHAR2) IS
+        v_lastID NUMBER;
+        v_newID  VARCHAR2(10);
     BEGIN
+        SELECT NVL(MAX(TO_NUMBER(SUBSTR(id, 4))), 0)
+        INTO v_lastID
+        FROM Categoria;
+        v_newID := 'CAT' || LPAD(v_lastID + 1, 3, '0');
+
         INSERT INTO Categoria (id, nombre, descripcion)
-        VALUES (NULL, xNOMBRE, xDESCRIPCION);
+        VALUES (v_newID, xNOMBRE, xDESCRIPCION);
         COMMIT;
     EXCEPTION
         WHEN DUP_VAL_ON_INDEX THEN
@@ -55,9 +62,16 @@ CREATE OR REPLACE PACKAGE BODY PK_ADMINISTRADOR AS
     -- LIBRO
     ------------------------------------------------------------
     PROCEDURE AD_LIBRO (xTITULO IN VARCHAR2, xFECHA_PUBLICACION IN DATE, xIDIOMA IN VARCHAR2, xDESCRIPCION IN VARCHAR2, xID_CATEGORIA IN VARCHAR2) IS
+        v_lastID NUMBER;
+        v_newID  VARCHAR2(10);
     BEGIN
+        SELECT NVL(MAX(TO_NUMBER(SUBSTR(id, 4))), 0)
+        INTO v_lastID
+        FROM Libro;
+        v_newID := 'LIB' || LPAD(v_lastID + 1, 3, '0');
+
         INSERT INTO Libro (id, titulo, fecha_publicacion, idioma, descripcion, idCategoria)
-        VALUES (NULL, xTITULO, xFECHA_PUBLICACION, xIDIOMA, xDESCRIPCION, xID_CATEGORIA);
+        VALUES (v_newID, xTITULO, xFECHA_PUBLICACION, xIDIOMA, xDESCRIPCION, xID_CATEGORIA);
         COMMIT;
     EXCEPTION
         WHEN OTHERS THEN ROLLBACK; RAISE;
@@ -107,9 +121,16 @@ CREATE OR REPLACE PACKAGE BODY PK_ADMINISTRADOR AS
     -- AUTOR
     ------------------------------------------------------------
     PROCEDURE AD_AUTOR (xNOMBRE IN VARCHAR2, xAPELLIDOS IN VARCHAR2, xGENERO IN VARCHAR2, xNACIONALIDAD IN VARCHAR2) IS
+        v_lastID NUMBER;
+        v_newID  VARCHAR2(10);
     BEGIN
+        SELECT NVL(MAX(TO_NUMBER(SUBSTR(id, 4))), 0)
+        INTO v_lastID
+        FROM Autor;
+        v_newID := 'AUT' || LPAD(v_lastID + 1, 3, '0');
+
         INSERT INTO Autor (id, nombre, apellidos, genero, nacionalidad)
-        VALUES (NULL, xNOMBRE, xAPELLIDOS, xGENERO, xNACIONALIDAD);
+        VALUES (v_newID, xNOMBRE, xAPELLIDOS, xGENERO, xNACIONALIDAD);
         COMMIT;
     EXCEPTION
         WHEN DUP_VAL_ON_INDEX THEN
@@ -181,9 +202,16 @@ CREATE OR REPLACE PACKAGE BODY PK_ADMINISTRADOR AS
     -- EDITORIAL
     ------------------------------------------------------------
     PROCEDURE AD_EDITORIAL (xNOMBRE IN VARCHAR2, xCORREO IN VARCHAR2, xTELEFONO IN VARCHAR2, xPAIS IN VARCHAR2) IS
+        v_lastID NUMBER;
+        v_newID  VARCHAR2(10);
     BEGIN
+        SELECT NVL(MAX(TO_NUMBER(SUBSTR(id, 4))), 0)
+        INTO v_lastID
+        FROM Editorial;
+        v_newID := 'EDT' || LPAD(v_lastID + 1, 3, '0');
+
         INSERT INTO Editorial (id, nombre, correo, telefono, pais)
-        VALUES (NULL, xNOMBRE, xCORREO, xTELEFONO, xPAIS);
+        VALUES (v_newID, xNOMBRE, xCORREO, xTELEFONO, xPAIS);
         COMMIT;
     EXCEPTION
         WHEN DUP_VAL_ON_INDEX THEN
@@ -230,9 +258,16 @@ CREATE OR REPLACE PACKAGE BODY PK_ADMINISTRADOR AS
     -- EDICION
     ------------------------------------------------------------
     PROCEDURE AD_EDICION (xID_LIBRO IN VARCHAR2, xID_EDITORIAL IN VARCHAR2, xANIO IN DATE, xPAGINAS IN NUMBER) IS
+        v_lastID NUMBER;
+        v_newID  VARCHAR2(10);
     BEGIN
+        SELECT NVL(MAX(TO_NUMBER(SUBSTR(id, 4))), 0)
+        INTO v_lastID
+        FROM Edicion;
+        v_newID := 'EDI' || LPAD(v_lastID + 1, 3, '0');
+
         INSERT INTO Edicion (id, idLibro, idEditorial, anio, paginas)
-        VALUES (NULL, xID_LIBRO, xID_EDITORIAL, xANIO, xPAGINAS);
+        VALUES (v_newID, xID_LIBRO, xID_EDITORIAL, xANIO, xPAGINAS);
         COMMIT;
     EXCEPTION
         WHEN OTHERS THEN ROLLBACK; RAISE;
@@ -294,13 +329,21 @@ CREATE OR REPLACE PACKAGE BODY PK_ADMINISTRADOR AS
     -- EJEMPLAR
     ------------------------------------------------------------
     PROCEDURE AD_EJEMPLAR (xID_EDICION IN VARCHAR2, xESTADO_FISICO IN VARCHAR2, xDISPONIBILIDAD IN NUMBER, xLOCALIZACION IN VARCHAR2, xFECHA_ADQ IN DATE) IS
+        v_lastID NUMBER;
+        v_newID  VARCHAR2(10);
     BEGIN
         -- TUP3: no puede ser disponibilidad=0 y estadoFisico='Nuevo'
         IF xDISPONIBILIDAD = 0 AND xESTADO_FISICO = 'Nuevo' THEN
             RAISE_APPLICATION_ERROR(-20016, 'Un ejemplar no disponible no puede tener estado Nuevo.');
         END IF;
+
+        SELECT NVL(MAX(TO_NUMBER(SUBSTR(id, 4))), 0)
+        INTO v_lastID
+        FROM Ejemplar;
+        v_newID := 'EJM' || LPAD(v_lastID + 1, 3, '0');
+
         INSERT INTO Ejemplar (id, idEdicion, estadoFisico, disponibilidad, localizacion, fechaAdquisicion)
-        VALUES (NULL, xID_EDICION, xESTADO_FISICO, xDISPONIBILIDAD, xLOCALIZACION, xFECHA_ADQ);
+        VALUES (v_newID, xID_EDICION, xESTADO_FISICO, xDISPONIBILIDAD, xLOCALIZACION, xFECHA_ADQ);
         COMMIT;
     EXCEPTION
         WHEN OTHERS THEN ROLLBACK; RAISE;
@@ -364,9 +407,16 @@ CREATE OR REPLACE PACKAGE BODY PK_ADMINISTRADOR AS
     -- PROVEEDOR
     ------------------------------------------------------------
     PROCEDURE AD_PROVEEDOR (xNOMBRE IN VARCHAR2, xAPELLIDOS IN VARCHAR2, xCORREO IN VARCHAR2, xEMPRESA IN VARCHAR2, xTELEFONO IN VARCHAR2) IS
+        v_lastID NUMBER;
+        v_newID  VARCHAR2(10);
     BEGIN
+        SELECT NVL(MAX(TO_NUMBER(SUBSTR(id, 4))), 0)
+        INTO v_lastID
+        FROM Proveedor;
+        v_newID := 'PRV' || LPAD(v_lastID + 1, 3, '0');
+
         INSERT INTO Proveedor (id, nombre, apellidos, correo, empresa, telefono)
-        VALUES (NULL, xNOMBRE, xAPELLIDOS, xCORREO, xEMPRESA, xTELEFONO);
+        VALUES (v_newID, xNOMBRE, xAPELLIDOS, xCORREO, xEMPRESA, xTELEFONO);
         COMMIT;
     EXCEPTION
         WHEN DUP_VAL_ON_INDEX THEN
@@ -412,13 +462,21 @@ CREATE OR REPLACE PACKAGE BODY PK_ADMINISTRADOR AS
     -- COMPRA
     ------------------------------------------------------------
     PROCEDURE AD_COMPRA (xFECHA IN DATE, xTOTAL IN NUMBER, xESTADO IN VARCHAR2, xID_PROVEEDOR IN VARCHAR2) IS
+        v_lastID NUMBER;
+        v_newID  VARCHAR2(10);
     BEGIN
         -- TUP1: si COMPLETADO, total debe ser > 0
         IF xESTADO = 'COMPLETADO' AND xTOTAL <= 0 THEN
             RAISE_APPLICATION_ERROR(-20022, 'Una compra COMPLETADA debe tener total mayor a cero.');
         END IF;
+
+        SELECT NVL(MAX(TO_NUMBER(SUBSTR(id, 4))), 0)
+        INTO v_lastID
+        FROM Compra;
+        v_newID := 'COM' || LPAD(v_lastID + 1, 3, '0');
+
         INSERT INTO Compra (id, fecha, total, estado, idProveedor)
-        VALUES (NULL, xFECHA, xTOTAL, xESTADO, xID_PROVEEDOR);
+        VALUES (v_newID, xFECHA, xTOTAL, xESTADO, xID_PROVEEDOR);
         COMMIT;
     EXCEPTION
         WHEN OTHERS THEN ROLLBACK; RAISE;

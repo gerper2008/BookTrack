@@ -424,6 +424,7 @@ CREATE OR REPLACE PACKAGE BODY PC_USUARIO IS
     ) IS
     BEGIN
         INSERT INTO Usuario(
+            id,
             correo,
             rol,
             nombre,
@@ -431,6 +432,7 @@ CREATE OR REPLACE PACKAGE BODY PC_USUARIO IS
             telefono
         )
         VALUES (
+            'USR' || LPAD(SQ_USUARIO.NEXTVAL, 3, '0'),
             xCORREO,
             xROL,
             xNOMBRE,

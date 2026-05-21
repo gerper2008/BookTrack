@@ -1,0 +1,336 @@
+================================================================================
+GUÍA COMPLETA DEL PROYECTO BOOKTRACK - CICLO 1
+================================================================================
+
+Sistema de Gestión de Biblioteca - Base de Datos Oracle
+================================================================================
+
+Este documento te ayudará a entender y trabajar con tu proyectoSQL.
+
+================================================================================
+ÍNDICE:
+================================================================================
+
+1. Estructura de Carpetas
+2. Orden de Ejecución
+3. Descripción de Cada Archivo
+4. Reglas de Negocio
+5. Problemas Comunes y Soluciones
+
+================================================================================
+1. ESTRUCTURA DE CARPETAS
+================================================================================
+
+Tu proyecto tiene la siguiente organización:
+
+- Fuentes_azules/   = Definición de la estructura (TABLAS, ATRIBUTOS, LLAVES)
+- Fuentes_verdes/     = Reglas de negocio (TUPLAS, ACCIONES, DISPARADORES)
+- Fuentes_rosadas/   = Optimización (VISTAS, ÍNDICES)
+- CRUD_Ciclo1/      = Operaciones CRUD completas
+- Seguridad/         = Control de acceso
+- Pruebas/           = Casos de prueba
+
+Cada carpeta tiene archivos numerados para ejecutarse en orden.
+
+================================================================================
+2. ORDEN DE EJECUCIÓN (IMPORTANTE)
+================================================================================
+
+Para crear la base de datos desde cero, DEBES ejecutar en este orden:
+
+==== ETAPA 1: ESTRUCTURA BASE (Azules) ====
+1. Fuentes_azules/01_TABLAS.sql
+   (CREA LAS 12 TABLAS DEL SISTEMA)
+   
+2. Fuentes_azules/02_ATRIBUTOS.sql
+   (DEFINE RESTRICCIONES DE CADA CAMPO - CHECKS SIMPLES)
+   
+3. Fuentes_azules/03_LLAVES.sql
+   (DEFINE CLAVES PRIMARIAS)
+   
+4. Fuentes_azules/04_POBLAR.sql
+   (INSERTA DATOS INICIALES)
+
+==== ETAPA 2: LÓGICA (Verdes) ====
+
+5. Fuentes_verdes/01_TUPLAS.sql
+   (RESTRICCIONES DE VARIOS CAMPOS - REGLAS DE TUPLA)
+   
+6. Fuentes_verdes/03_ACCIONES.sql
+   (DEFINE RELACIONES ENTRE TABLAS - LLAVES FORÁNEAS)
+   
+7. Fuentes_verdes/05_DISPARADORES.sql
+   (DEFINE TRIGGERS - AUTOMATISMOS)
+
+==== ETAPA 3: OPTIMIZACIÓN (Rosadas) ====
+
+8. Fuentes_rosadas/01_VISTAS.sql
+   (CREA VISTAS PARA CONSULTAS)
+   
+9. Fuentes_rosadas/02_INDICES.sql
+   (CREA ÍNDICES PARA RENDIMIENTO)
+
+==== ETAPA 4: OPERACIONES CRUD ====
+
+10. CRUD_Ciclo1/01_CRUDE_Especificacion.sql
+11. CRUD_Ciclo1/02_CRUDI_Implementacion.sql
+12. CRUD_Ciclo1/03_XCRUD_Eliminacion.sql
+
+==== ETAPA 5: SEGURIDAD ====
+
+13. Seguridad/Seguridad.sql
+14. Seguridad/ActoresI.sql
+15. Seguridad/ActoresE.sql
+
+==== ETAPA 6: PRUEBAS ====
+
+16. Pruebas/Caso1.sql
+17. Pruebas/Caso2.sql
+
+================================================================================
+3. DESCRIPCIÓN DETALLADA DE CADA ARCHIVO
+================================================================================
+
+===== FUENTES AZULES =====
+
+--- 01_TABLAS.sql ---
+Crea las 12 tablas principales:
+- Usuario       (usuarios del sistema)
+- Administrador(datos de admin)
+- Categoria    (categorías de libros)
+- Autor        (autores)
+- Libro        (libros)
+- Libro_Autor  (relación libro-autor)
+- Ejemplar     (ejemplares físicos)
+- Edicion      (ediciones de libros)
+- Editorial   (editoras)
+- Producto_Compra(productos comprados)
+- Compra       (compras a proveedores)
+- Proveedor   (proveedores)
+
+--- 02_ATRIBUTOS.sql ---
+Define restricciones simples para cada campo:
+-格式os de texto ( emails, teléfonos)
+-Lista de valores válidos (estado, género)
+-Fechas no mayores a 31/12/2025
+-Valores positivos (> 0)
+
+--- 03_LLAVES.sql ---
+Define las CLAVES PRIMARIAS (PK) de cada tabla.
+
+--- 04_POBLAR.sql ---
+Inserta datos de ejemplo para pruebas.
+
+--- 05_CONSULTAS.sql ---
+Consultas de ejemplo.
+
+--- 06_XTABLAS.sql ---
+Elimina todas las tablas (para limpiar).
+
+
+===== FUENTES VERDES =====
+
+--- 01_TUPLAS.sql ---
+Define restricciones que afectan VARIOS CAMPOS a la vez:
+
+* TUP1: Compra completada debe tener total > 0
+* TUP2: Producto_Compra debe tener cantidad > 0 Y precioUnidad > 0  
+* TUP3: Ejemplar no disponible NO puede tener estadoFisico = 'Nuevo'
+* TUP4: Año de edición >= fecha de publicación del libro
+
+--- 02_TUPLAS_OK_NOOK.sql ---
+PRUEBAS de las reglas de tupla.
+Casos que deben PASAR (OK) y casos que deben FALLAR (NO OK).
+
+--- 03_ACCIONES.sql ---
+Define las RELACIONES entre tablas (LLAVES FORÁNEAS):
+- Libro → Categoria (SET NULL al borrar)
+- Edicion → Libro (CASCADE al borrar)
+- Edicion → Editorial (SET NULL al borrar)
+- Ejemplar → Edicion (CASCADE al borrar)
+- Libro_Autor → Autor (CASCADE al borrar)
+- Libro_Autor → Libro (CASCADE al borrar)
+- Compra → Proveedor (SET NULL al borrar)
+- Producto_Compra → Compra (CASCADE al borrar)
+- Producto_Compra → Libro (SET NULL al borrar)
+- Administrador → Usuario (CASCADE al borrar)
+
+--- 04_ACCIONES_OK_NOOK.sql ---
+PRUEBAS de las relaciones entre tablas.
+
+--- 05_DISPARADORES.sql ---
+Define los TRIGGERS (disparadores automáticos):
+
+* DISP-01: Auto-generar id de Categoría (CAT001, CAT002...)
+* DISP-02: Auto-generar id de Libro (LIB001, LIB002...)
+* DISP-03: No cambiar título si tiene ediciones
+* DISP-04: Auto-generar id de Autor (AUT001, AUT002...)
+* DISP-05: Auto-generar id de Edición (EDI001, EDI002...)
+* DISP-06: No cambiar/edición si tiene ejemplares
+* DISP-07: No borrar edición con ejemplares
+* DISP-08: Auto-generar id de Editorial (EDT001, EDT002...)
+* DISP-09: No borrar editorial con ediciones
+* DISP-10: Auto-generar id de Ejemplar (EJM001, EJM002...)
+* DISP-11: No borrar ejemplar disponible
+* DISP-12: Auto-generar id de Compra (COM001, COM002...)
+* DISP-13: Compra inicia en PENDIENTE
+* DISP-14: No modificar compra no pendiente
+* DISP-15: No borrar compra no pendiente
+* DISP-16: Auto-generar id de Proveedor (PRV001, PRV002...)
+* DISP-17: No borrar proveedor con compras
+
+--- 06_DISPARADORES_OK_NOOK.sql ---
+PRUEBAS de los triggers.
+Casos OK (debemapasar) y NO OK (deben fallar).
+
+--- 07_XTABLAS.sql ---
+Elimina tablas y triggers (limpieza).
+
+===== FUENTES ROSADAS =====
+
+--- 01_VISTAS.sql ---
+Crea vistas para consultas frecuentes:
+- VW_Catalogo_Libros
+- VW_Proveedores
+- VW_Compras
+- VW_Productos_Compra
+- VW_Ejemplares_Disponibles
+
+--- 02_INDICES.sql ---
+Crea índices para mejorar rendimiento.
+
+===== CRUD_Ciclo1 =====
+
+--- 01_CRUDE_Especificacion.sql ---
+Especificación de operaciones CRUD.
+
+--- 02_CRUDI_Implementacion.sql ---
+Implementación de INSERT y UPDATE.
+
+--- 03_XCRUD_Eliminacion.sql ---
+Implementación de DELETE.
+
+--- 04_CRUDOK_DatosCorrectos.sql ---
+Datos válidos para pruebas.
+
+--- 05_CRUDNoOK_DatosErroneos.sql ---
+Datos inválidos para pruebas.
+
+===== SEGURIDAD =====
+
+--- Seguridad.sql ---
+Políticas de seguridad.
+
+--- SeguridadOK.sql ---
+Pruebas de seguridad.
+
+--- ActoresI.sql ---
+Actores internos.
+
+--- ActoresE.sql ---
+Actores externos.
+
+--- XSeguridad.sql ---
+Eliminar objetos de seguridad.
+
+===== PRUEBAS =====
+
+--- Caso1.sql ---
+Caso de prueba #1.
+
+--- Caso2.sql ---
+Caso de prueba #2.
+
+================================================================================
+4. REGLAS DE NEGOCIO IMPORTANTES
+================================================================================
+
+REGLAS DE COMPRA:
+- Estados válidos: 'PENDIENTE', 'COMPLETADO', 'RECHAZADO'
+- Si estado = 'COMPLETADO', entonces total > 0
+
+REGLAS DE PRODUCTO_COMPRA:
+- cantidad > 0
+- precioUnidad > 0
+
+REGLAS DE EJEMPLAR:
+- Estados físicos válidos: 'Desgastado', 'Bueno', 'Dañado', 'Restaurado', 'Perdido', 'Nuevo'
+- Disponibilidad: 0 (no disponible) o 1 (disponible)
+- Si disponibilidad = 0, NO puede tener estadoFisico = 'Nuevo'
+
+REGLAS DE USUARIO:
+- Roles válidos: 'Administrador', 'Lector', 'Bibliotecario'
+
+REGLAS DE ADMINISTRADOR:
+- Permisos válidos: 'Solo Lectura', 'Operativo', 'Total'
+
+REGLAS DE AUTOR:
+- Géneros válidos: 'Masculino', 'Femenino', 'Otro'
+
+================================================================================
+5. PROBLEMAS COMUNES Y SOLUCIONES
+================================================================================
+
+PROBLEMA: ORA-02291 (integrity constraint violated)
+CAUSA: Intentas crear una FK pero la PK relacionada no existe.
+SOLUCIÓN: 
+- Verifica que ya ejecutaste 03_LLAVES.sql
+- Debes tener las PK antes de crear las FK
+
+PROBLEMA: ORA-02290 (check constraint violated)
+CAUSA: Un valor no cumple una restricción CHECK.
+SOLUCIÓN:
+- Verifica el valor que intentas insertar
+- Revisa la regla de negocio correspondiente
+
+PROBLEMA: Trigger no compila
+CAUSA: La tabla o los campos referenciados no existen.
+SOLUCIÓN:
+- Verifica que las tablas estén creadas
+- Ejecuta en el orden correcto
+
+PROBLEMA: Datos no se insertan
+CAUSA: Restricciones CHECK o FK bloquean.
+SOLUCIÓN:
+- Revisa los errores específicos
+- Verifica que los datos padre existan
+
+PROBLEMA: FK no funciona
+CAUSA: Orden de ejecución incorrecto.
+SOLUCIÓN:
+- ACCIONES debe ejecutarse DESPUÉS de LLAVES y TUPLAS
+
+================================================================================
+GUÍA RÁPIDA: VERIFICAR ERRORES
+================================================================================
+
+Después de ejecutar todos los scripts, verifica que no hay errores:
+
+-- Ver objetos inválidos
+SELECT object_name, object_type, status 
+FROM user_objects 
+WHERE status = 'INVALID';
+
+-- Ver errores de compilación
+SELECT name, text 
+FROM user_errors 
+WHERE type IN ('TRIGGER', 'PROCEDURE');
+
+-- Ver restricciones activas
+SELECT constraint_name, table_name, constraint_type, status 
+FROM user_constraints 
+WHERE status = 'ENABLED';
+
+================================================================================
+GUÍA RÁPIDA: LIMPIAR TODO
+================================================================================
+
+Para borrar todo y empezar de nuevo):
+
+1. Ejecute: @Fuentes_azules/06_XTABLAS.sql
+2. O bien: @Fuentes_verdes/07_XTABLAS.sql
+3. Luego vuelve a ejecutar desde 01_TABLAS.sql
+
+================================================================================
+FIN DEL DOCUMENTO
+================================================================================
