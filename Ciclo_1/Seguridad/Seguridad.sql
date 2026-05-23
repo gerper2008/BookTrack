@@ -52,4 +52,4 @@ END;
 /
  
 -- Solo se usa PK_ADMINISTRADOR en este modelo de seguridad.
--- No se otorgan permisos sobre paquetes obsoletos como PC_SEGURIDAD.
+

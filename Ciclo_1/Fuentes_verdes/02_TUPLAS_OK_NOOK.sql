@@ -14,7 +14,7 @@ VALUES ('COM099', TO_DATE('2024-07-01','YYYY-MM-DD'), 200000.00, 'PENDIENTE', 'P
 -- Ahora actualizamos a COMPLETADO (DISP-14 permite updates cuando esta en PENDIENTE)
 UPDATE Compra SET estado = 'COMPLETADO' WHERE id = 'COM099';
 -- Verificar que quedó en COMPLETADO
-SELECT id, estado, total FROM Compra WHERE id = 'COM099';
+--SELECT id, estado, total FROM Compra WHERE id = 'COM099';
 
 -- TUP1 OK (alternativo): Compra PENDIENTE con total >= 0
 INSERT INTO Compra (id, fecha, total, estado, idProveedor)

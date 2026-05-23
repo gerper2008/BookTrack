@@ -147,6 +147,8 @@ EXCEPTION
 END;
 /
 
+--SELECT * FROM ADMINISTRADOR ORDER BY IDUsuario DESC;
+
 ---------------------------------------------------------------------------------------------
 -- 3) CATEGORIAS
 ---------------------------------------------------------------------------------------------
@@ -159,6 +161,7 @@ EXCEPTION
         END IF;
 END;
 /
+
 BEGIN
     PK_ADMINISTRADOR.AD_CATEGORIA('Seguridad ZS Dos', 'Categoria prueba seguridad ZS 2');
 EXCEPTION
@@ -204,7 +207,7 @@ EXCEPTION
 END;
 /
 BEGIN
-    PK_ADMINISTRADOR.AD_EDITORIAL('Editorial ZS Dos', 'zs.edit2@booktrack.com', '3025552222', 'Argentina');
+    PK_ADMINISTRADOR.AD_EDITORIAL('Editorial ZS Dos', 'zs.edit2@booktrack.com', '3025512222', 'Argentina');
 EXCEPTION
     WHEN OTHERS THEN
         IF SQLCODE != -20011 THEN
@@ -387,8 +390,8 @@ COMMIT;
 ---------------------------------------------------------------------------------------------
 -- CONSULTAS DE VERIFICACIÓN (EN COMENTARIOS)
 ---------------------------------------------------------------------------------------------
--- SELECT * FROM Usuario WHERE correo = 'zs.admin@booktrack.com';
--- SELECT * FROM Administrador WHERE idUsuario IN (SELECT id FROM Usuario WHERE correo='zs.admin@booktrack.com');
+SELECT * FROM Usuario WHERE correo = 'zs.admin@booktrack.com';
+SELECT * FROM Administrador WHERE idUsuario IN (SELECT id FROM Usuario WHERE correo='zs.admin@booktrack.com');
 -- SELECT * FROM Categoria WHERE descripcion LIKE 'Categoria prueba seguridad ZS%';
 -- SELECT * FROM Autor WHERE nombre = 'AutorZS';
 -- SELECT * FROM Editorial WHERE correo IN ('zs.edit1@booktrack.com','zs.edit2@booktrack.com');

@@ -96,6 +96,8 @@ END PC_USUARIO;
 --  Crear ANTES de compilar los Package Bodies
 -- ============================================================
 
+--esto es esencial paera que no haya errores al insertar o modificar ids
+
 CREATE SEQUENCE SQ_CATEGORIA  START WITH 1 INCREMENT BY 1 NOCACHE NOCYCLE;
 CREATE SEQUENCE SQ_AUTOR      START WITH 1 INCREMENT BY 1 NOCACHE NOCYCLE;
 CREATE SEQUENCE SQ_EDITORIAL  START WITH 1 INCREMENT BY 1 NOCACHE NOCYCLE;

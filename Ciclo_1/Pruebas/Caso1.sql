@@ -204,7 +204,7 @@ BEGIN
 
     BEGIN
         DELETE FROM Ejemplar
-        WHERE id = 'EJM900';
+        WHERE id = 'EJM052';
 
         COMMIT;
 

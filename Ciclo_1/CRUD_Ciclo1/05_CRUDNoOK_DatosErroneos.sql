@@ -39,6 +39,8 @@ BEGIN PC_LIBRO.AD_LIBRO('CAT001', NULL, 'Sin titulo', TO_DATE('2020-01-01','YYYY
 BEGIN PC_LIBRO.AD_LIBRO('CAT999', 'Libro Invalido', 'Test', TO_DATE('2020-01-01','YYYY-MM-DD'), 'Espanol'); END;
 /
 
+--SELECT * FROM CATEGORIA WHERE Id='CAT999';
+
 -- NoOK-09: Libro_Autor con autor inexistente
 BEGIN PC_LIBRO.AD_LIBRO_AUTOR('LIB001', 'AUT999'); END;
 /

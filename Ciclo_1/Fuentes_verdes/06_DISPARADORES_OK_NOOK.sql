@@ -44,7 +44,7 @@ VALUES (
 COMMIT;
 
 -- Verificar
---SELECT * FROM LIBRO WHERE titulo='Libro Auto ZV';
+SELECT * FROM LIBRO WHERE titulo='Libro Auto ZV';
 
 -- DISP-03 OK: Modificar título de libro SIN ediciones
 INSERT INTO Libro (titulo, fecha_publicacion, idioma, descripcion, idCategoria)
@@ -167,9 +167,11 @@ VALUES (
     220
 );
 
+SELECT * FROM Edicion ORDER BY ID DESC;
+
 INSERT INTO Ejemplar (idEdicion, estadoFisico, disponibilidad, localizacion, fechaAdquisicion)
 VALUES (
-    'EDI001',
+    'EDI051',
     'Bueno',
     0,
     'Bodega ZV 70',
@@ -177,6 +179,8 @@ VALUES (
 );
 
 COMMIT;
+
+SELECT * FROM Edicion ORDER BY ID DESC;
 
 -- DISP-11 OK: Eliminar ejemplar NO disponible
 INSERT INTO Ejemplar (idEdicion, estadoFisico, disponibilidad, localizacion, fechaAdquisicion)
@@ -305,12 +309,12 @@ VALUES (
     'CATZV60'
 );
 
--- SELECT idLibro FROM EDICION;
+SELECT idLibro FROM EDICION;
 
 INSERT INTO Edicion (id, idLibro, idEditorial, anio, paginas)
 VALUES (
     'EDIZV80',
-    'LIBZV80',
+    'LIB050',
     'EDTZV60',
     TO_DATE('2021-01-01','YYYY-MM-DD'),
     180
@@ -319,14 +323,13 @@ VALUES (
 -- Error esperado: ORA-20020
 UPDATE Libro
 SET titulo = 'Titulo Prohibido ZV'
-WHERE id = 'LIBZV80';
+WHERE id = 'LIB050';
 
 ROLLBACK;
 
 -- DISP-06 NO OK: No modificar libro/editorial de edición con ejemplares
-INSERT INTO Edicion (id, idLibro, idEditorial, anio, paginas)
+INSERT INTO Edicion (idLibro, idEditorial, anio, paginas)
 VALUES (
-    'EDIZV81',
     'LIBZV62',
     'EDTZV60',
     TO_DATE('2021-01-01','YYYY-MM-DD'),

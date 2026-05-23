@@ -23,6 +23,8 @@ EXCEPTION
         END IF;
 END;
 /
+
+
 BEGIN
     PC_CATEGORIA.AD_CATEGORIA('Arte ZV', 'Libros sobre pintura y musica');
 EXCEPTION

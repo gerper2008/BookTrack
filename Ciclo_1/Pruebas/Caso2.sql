@@ -41,9 +41,6 @@ END;
 
 -- Verificación paso 1
 SELECT * FROM PROVEEDOR ORDER BY ID DESC; -- VER ULTIMO ID
-SELECT *
-FROM Proveedor
-WHERE id = 'PRV054';
 
 
 -- PASO 2 ----------------------------------------------------------------------
@@ -74,7 +71,7 @@ END;
 SELECT * FROM Compra ORDER BY ID DESC; -- VER ULTIMO ID
 SELECT *
 FROM Compra
-WHERE id = 'COM055';
+WHERE id = 'COM053';
 
 
 -- PASO 3 ----------------------------------------------------------------------
@@ -83,12 +80,15 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE('=== PASO 3: Registro productos compra ===');
 
     INSERT INTO Producto_Compra(
+        id,
+        idCompra,
         idLibro,
         cantidad,
         precioUnidad
     )
     VALUES (
-        'COM055',
+        'PCM002',
+        'COM054',
         'LIB001',
         5,
         90000
@@ -104,7 +104,7 @@ END;
 SELECT * FROM Compra ORDER BY ID DESC; -- VER ULTIMO ID
 SELECT *
 FROM Producto_Compra
-WHERE idCompra = 'COM900';
+WHERE idCompra = 'COM055';
 
 
 -- PASO 4 ----------------------------------------------------------------------
@@ -115,7 +115,7 @@ BEGIN
 
     UPDATE Compra
     SET estado = 'COMPLETADO'
-    WHERE id = 'COM900';
+    WHERE id = 'COM003';
 
     COMMIT;
 
@@ -123,10 +123,12 @@ BEGIN
 END;
 /
 
+SELECT * FROM COMPRA ORDER BY ID DESC;
+
 -- Verificación paso 4
 SELECT id, estado
 FROM Compra
-WHERE id = 'COM900';
+WHERE id = 'COM003';
 
 
 -- PASO 5 ----------------------------------------------------------------------
@@ -173,7 +175,7 @@ BEGIN
 
     BEGIN
         DELETE FROM Compra
-        WHERE id = 'COM900';
+        WHERE id = 'COM052';
 
         COMMIT;
 
@@ -219,4 +221,4 @@ JOIN Producto_Compra P
     ON P.idCompra = C.id
 LEFT JOIN Libro L
     ON L.id = P.idLibro
-WHERE C.id = 'COM900';
+WHERE C.id = 'COM054';
