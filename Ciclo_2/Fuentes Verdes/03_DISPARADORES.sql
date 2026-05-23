@@ -6,7 +6,17 @@
 -- [TRG-01] TRG_Prestamo_ID
 -- Autogenera el ID de Prestamo con formato PR + secuencia de 3 dígitos
 ---------------------------------------------------------------------------------------------
-CREATE SEQUENCE SEQ_Prestamo START WITH 1 INCREMENT BY 1 NOCACHE;
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'DROP SEQUENCE SEQ_Prestamo';
+    EXCEPTION
+        WHEN OTHERS THEN NULL;
+    END;
+    EXECUTE IMMEDIATE 'CREATE SEQUENCE SEQ_Prestamo START WITH ' ||
+        (SELECT NVL(MAX(TO_NUMBER(SUBSTR(id,3))), 0) + 1 FROM Prestamo) ||
+        ' INCREMENT BY 1 NOCACHE';
+END;
+/
 
 CREATE OR REPLACE TRIGGER TRG_Prestamo_ID
 BEFORE INSERT ON Prestamo
@@ -22,7 +32,17 @@ END;
 -- [TRG-02] TRG_Devolucion_ID
 -- Autogenera el ID de Devolucion con formato DV + secuencia de 3 dígitos
 ---------------------------------------------------------------------------------------------
-CREATE SEQUENCE SEQ_Devolucion START WITH 1 INCREMENT BY 1 NOCACHE;
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'DROP SEQUENCE SEQ_Devolucion';
+    EXCEPTION
+        WHEN OTHERS THEN NULL;
+    END;
+    EXECUTE IMMEDIATE 'CREATE SEQUENCE SEQ_Devolucion START WITH ' ||
+        (SELECT NVL(MAX(TO_NUMBER(SUBSTR(id,3))), 0) + 1 FROM Devolucion) ||
+        ' INCREMENT BY 1 NOCACHE';
+END;
+/
 
 CREATE OR REPLACE TRIGGER TRG_Devolucion_ID
 BEFORE INSERT ON Devolucion
@@ -38,7 +58,17 @@ END;
 -- [TRG-03] TRG_Multa_ID
 -- Autogenera el ID de Multa con formato MT + secuencia de 3 dígitos
 ---------------------------------------------------------------------------------------------
-CREATE SEQUENCE SEQ_Multa START WITH 1 INCREMENT BY 1 NOCACHE;
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'DROP SEQUENCE SEQ_Multa';
+    EXCEPTION
+        WHEN OTHERS THEN NULL;
+    END;
+    EXECUTE IMMEDIATE 'CREATE SEQUENCE SEQ_Multa START WITH ' ||
+        (SELECT NVL(MAX(TO_NUMBER(SUBSTR(id,3))), 0) + 1 FROM Multa) ||
+        ' INCREMENT BY 1 NOCACHE';
+END;
+/
 
 CREATE OR REPLACE TRIGGER TRG_Multa_ID
 BEFORE INSERT ON Multa
@@ -54,7 +84,17 @@ END;
 -- [TRG-04] TRG_Pago_ID
 -- Autogenera el ID de Pago con formato PG + secuencia de 3 dígitos
 ---------------------------------------------------------------------------------------------
-CREATE SEQUENCE SEQ_Pago START WITH 1 INCREMENT BY 1 NOCACHE;
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'DROP SEQUENCE SEQ_Pago';
+    EXCEPTION
+        WHEN OTHERS THEN NULL;
+    END;
+    EXECUTE IMMEDIATE 'CREATE SEQUENCE SEQ_Pago START WITH ' ||
+        (SELECT NVL(MAX(TO_NUMBER(SUBSTR(id,3))), 0) + 1 FROM Pago) ||
+        ' INCREMENT BY 1 NOCACHE';
+END;
+/
 
 CREATE OR REPLACE TRIGGER TRG_Pago_ID
 BEFORE INSERT ON Pago
@@ -89,6 +129,7 @@ BEGIN
     END IF;
 END;
 /
+
 
 ---------------------------------------------------------------------------------------------
 -- [TRG-06] TRG_Multa_RetrasoAuto
