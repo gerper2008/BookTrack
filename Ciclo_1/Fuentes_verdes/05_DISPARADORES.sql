@@ -11,13 +11,12 @@ FOR EACH ROW
 DECLARE
     lastID NUMBER;
 BEGIN
-    -- Solo autogenerar si no viene ID explícito
     IF :NEW.id IS NULL THEN
         SELECT NVL(MAX(CASE
-                WHEN REGEXP_LIKE(SUBSTR(id, 4), '^\d+$')
-                THEN TO_NUMBER(SUBSTR(id, 4))
-                ELSE 0
-               END), 0)
+            WHEN REGEXP_LIKE(SUBSTR(id, 4), '^\d+$')
+            THEN TO_NUMBER(SUBSTR(id, 4))
+            ELSE 0
+            END), 0)
         INTO lastID
         FROM Categoria;
         :NEW.id := 'CAT' || LPAD(lastID + 1, 3, '0');
@@ -36,10 +35,10 @@ DECLARE
 BEGIN
     IF :NEW.id IS NULL THEN
         SELECT NVL(MAX(CASE
-                WHEN REGEXP_LIKE(SUBSTR(id, 4), '^\d+$')
-                THEN TO_NUMBER(SUBSTR(id, 4))
-                ELSE 0
-               END), 0)
+            WHEN REGEXP_LIKE(SUBSTR(id, 4), '^\d+$')
+            THEN TO_NUMBER(SUBSTR(id, 4))
+            ELSE 0
+            END), 0)
         INTO lastID
         FROM Libro;
         :NEW.id := 'LIB' || LPAD(lastID + 1, 3, '0');
@@ -58,10 +57,10 @@ DECLARE
 BEGIN
     IF :NEW.id IS NULL THEN
         SELECT NVL(MAX(CASE
-                WHEN REGEXP_LIKE(SUBSTR(id, 4), '^\d+$')
-                THEN TO_NUMBER(SUBSTR(id, 4))
-                ELSE 0
-               END), 0)
+            WHEN REGEXP_LIKE(SUBSTR(id, 4), '^\d+$')
+            THEN TO_NUMBER(SUBSTR(id, 4))
+            ELSE 0
+            END), 0)
         INTO lastID
         FROM Autor;
         :NEW.id := 'AUT' || LPAD(lastID + 1, 3, '0');
@@ -80,10 +79,10 @@ DECLARE
 BEGIN
     IF :NEW.id IS NULL THEN
         SELECT NVL(MAX(CASE
-                WHEN REGEXP_LIKE(SUBSTR(id, 4), '^\d+$')
-                THEN TO_NUMBER(SUBSTR(id, 4))
-                ELSE 0
-               END), 0)
+            WHEN REGEXP_LIKE(SUBSTR(id, 4), '^\d+$')
+            THEN TO_NUMBER(SUBSTR(id, 4))
+            ELSE 0
+            END), 0)
         INTO lastID
         FROM Edicion;
         :NEW.id := 'EDI' || LPAD(lastID + 1, 3, '0');
@@ -102,10 +101,10 @@ DECLARE
 BEGIN
     IF :NEW.id IS NULL THEN
         SELECT NVL(MAX(CASE
-                WHEN REGEXP_LIKE(SUBSTR(id, 4), '^\d+$')
-                THEN TO_NUMBER(SUBSTR(id, 4))
-                ELSE 0
-               END), 0)
+            WHEN REGEXP_LIKE(SUBSTR(id, 4), '^\d+$')
+            THEN TO_NUMBER(SUBSTR(id, 4))
+            ELSE 0
+            END), 0)
         INTO lastID
         FROM Editorial;
         :NEW.id := 'EDT' || LPAD(lastID + 1, 3, '0');
@@ -124,10 +123,10 @@ DECLARE
 BEGIN
     IF :NEW.id IS NULL THEN
         SELECT NVL(MAX(CASE
-                WHEN REGEXP_LIKE(SUBSTR(id, 4), '^\d+$')
-                THEN TO_NUMBER(SUBSTR(id, 4))
-                ELSE 0
-               END), 0)
+            WHEN REGEXP_LIKE(SUBSTR(id, 4), '^\d+$')
+            THEN TO_NUMBER(SUBSTR(id, 4))
+            ELSE 0
+            END), 0)
         INTO lastID
         FROM Ejemplar;
         :NEW.id := 'EJM' || LPAD(lastID + 1, 3, '0');
@@ -146,10 +145,10 @@ DECLARE
 BEGIN
     IF :NEW.id IS NULL THEN
         SELECT NVL(MAX(CASE
-                WHEN REGEXP_LIKE(SUBSTR(id, 4), '^\d+$')
-                THEN TO_NUMBER(SUBSTR(id, 4))
-                ELSE 0
-               END), 0)
+            WHEN REGEXP_LIKE(SUBSTR(id, 4), '^\d+$')
+            THEN TO_NUMBER(SUBSTR(id, 4))
+            ELSE 0
+            END), 0)
         INTO lastID
         FROM Compra;
         :NEW.id := 'COM' || LPAD(lastID + 1, 3, '0');
@@ -185,10 +184,10 @@ DECLARE
 BEGIN
     IF :NEW.id IS NULL THEN
         SELECT NVL(MAX(CASE
-                WHEN REGEXP_LIKE(SUBSTR(id, 4), '^\d+$')
-                THEN TO_NUMBER(SUBSTR(id, 4))
-                ELSE 0
-               END), 0)
+            WHEN REGEXP_LIKE(SUBSTR(id, 4), '^\d+$')
+            THEN TO_NUMBER(SUBSTR(id, 4))
+            ELSE 0
+            END), 0)
         INTO lastID
         FROM Proveedor;
         :NEW.id := 'PRV' || LPAD(lastID + 1, 3, '0');

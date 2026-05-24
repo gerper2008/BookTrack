@@ -20,7 +20,7 @@ MODIFY (
 ALTER TABLE Cliente ADD CONSTRAINT CHECK_Cliente_estado
     CHECK (estado IN ('Activo', 'Suspendido', 'Inactivo', 'Moroso'));
 ALTER TABLE Cliente ADD CONSTRAINT CHECK_Cliente_fechaVencimiento
-    CHECK (fechaVencimiento >= TO_DATE('01/01/2020', 'DD/MM/YYYY'));
+    CHECK (fechaVencimiento >= TO_DATE('01/01/2026', 'DD/MM/YYYY'));
 ALTER TABLE Cliente ADD CONSTRAINT CHECK_Cliente_saldo
     CHECK (saldo >= 0);
 ALTER TABLE Cliente
@@ -32,7 +32,7 @@ MODIFY (
 
 -- Prestamo
 ALTER TABLE Prestamo ADD CONSTRAINT CHECK_Prestamo_fechaPrestamo
-    CHECK (fechaPrestamo <= TO_DATE('31/12/2025', 'DD/MM/YYYY'));
+    CHECK (fechaPrestamo <= TO_DATE('31/12/2026', 'DD/MM/YYYY'));
 ALTER TABLE Prestamo ADD CONSTRAINT CHECK_Prestamo_diasRetraso
     CHECK (diasRetraso >= 0);
 ALTER TABLE Prestamo
@@ -44,7 +44,7 @@ MODIFY (
 ALTER TABLE Devolucion ADD CONSTRAINT CHECK_Devolucion_observaciones
     CHECK (REGEXP_LIKE(observaciones, '^[A-Za-z0-9áéíóúÁÉÍÓÚüÜñÑ ,.-]+$'));
 ALTER TABLE Devolucion ADD CONSTRAINT CHECK_Devolucion_fechaEstimada
-    CHECK (fechaEstimada >= TO_DATE('01/01/2020', 'DD/MM/YYYY'));
+    CHECK (fechaEstimada >= TO_DATE('01/01/2026', 'DD/MM/YYYY'));
 ALTER TABLE Devolucion ADD CONSTRAINT CHECK_Devolucion_estadoEntrega
     CHECK (estadoEntrega IN (0, 1));
 ALTER TABLE Devolucion
@@ -73,7 +73,7 @@ ALTER TABLE Pago ADD CONSTRAINT CHECK_Pago_estado
 ALTER TABLE Pago ADD CONSTRAINT CHECK_Pago_metodoPago
     CHECK (metodoPago IN ('Efectivo', 'Tarjeta', 'Transferencia', 'Otro'));
 ALTER TABLE Pago ADD CONSTRAINT CHECK_Pago_fechaPago
-    CHECK (fechaPago <= TO_DATE('31/12/2025', 'DD/MM/YYYY'));
+    CHECK (fechaPago <= TO_DATE('31/12/2026', 'DD/MM/YYYY'));
 ALTER TABLE Pago
 MODIFY (
     estado     NOT NULL,
