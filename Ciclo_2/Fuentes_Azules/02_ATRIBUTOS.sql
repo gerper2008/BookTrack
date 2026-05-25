@@ -37,7 +37,10 @@ ALTER TABLE Prestamo ADD CONSTRAINT CHECK_Prestamo_diasRetraso
     CHECK (diasRetraso >= 0);
 ALTER TABLE Prestamo
 MODIFY (
-    fechaPrestamo NOT NULL
+    fechaPrestamo NOT NULL,
+    idCliente NOT NULL,
+    idBibliotecario NOT NULL,
+    idEjemplar NOT NULL
 );
 
 -- Devolucion

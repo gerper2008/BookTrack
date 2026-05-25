@@ -56,9 +56,9 @@ CREATE TABLE Pago (
 ---------------------------------------------------------------------------------------------
 --- XTABLAS: Eliminación de tablas
 ---------------------------------------------------------------------------------------------
--- DROP TABLE Pago CASCADE CONSTRAINTS;
--- DROP TABLE Multa CASCADE CONSTRAINTS;
--- DROP TABLE Devolucion CASCADE CONSTRAINTS;
--- DROP TABLE Prestamo CASCADE CONSTRAINTS;
--- DROP TABLE Cliente CASCADE CONSTRAINTS;
--- DROP TABLE Bibliotecario CASCADE CONSTRAINTS;
+DROP TABLE Pago CASCADE CONSTRAINTS;
+DROP TABLE Multa CASCADE CONSTRAINTS;
+DROP TABLE Devolucion CASCADE CONSTRAINTS;
+DROP TABLE Prestamo CASCADE CONSTRAINTS;
+DROP TABLE Cliente CASCADE CONSTRAINTS;
+DROP TABLE Bibliotecario CASCADE CONSTRAINTS;
