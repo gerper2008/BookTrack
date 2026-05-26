@@ -9,7 +9,8 @@
 -- que internamente delega en los paquetes PC_PRESTAMO y PC_DEVOLUCION.
 --
 --------------------------------------------------------------------------------
-
+--SET SERVEROUTPUT ON;
+--------------------------------------------------------------------------------
 -- LIMPIEZA PREVIA
 BEGIN
     BEGIN

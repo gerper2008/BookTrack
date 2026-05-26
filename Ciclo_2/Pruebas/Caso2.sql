@@ -9,7 +9,8 @@
 -- que internamente delega en los paquetes PC_MULTA y PC_PAGO.
 --
 --------------------------------------------------------------------------------
-
+SET SERVEROUTPUT ON;
+--------------------------------------------------------------------------------
 -- LIMPIEZA PREVIA
 BEGIN
     BEGIN
